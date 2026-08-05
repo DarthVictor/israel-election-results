@@ -1,296 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <base target="_top" />
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <title>Israel Polls 2022</title>
-
-        <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="docs/images/favicon.ico"
-        />
-
-        <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-            crossorigin=""
-        />
-        <script
-            src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-            crossorigin=""
-        ></script>
-
-        <style>
-            html,
-            body {
-                height: 100%;
-                margin: 0;
-            }
-            .leaflet-container {
-                max-width: 100%;
-                max-height: 100%;
-            }
-
-            #map {
-                width: 100vw;
-                height: 100vh;
-            }
-
-            .controls {
-                padding: 6px 8px;
-                font: 14px/16px Arial, Helvetica, sans-serif;
-                background: white;
-                background: rgba(255, 255, 255, 0.8);
-                box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-                border-radius: 5px;
-            }
-
-            .controls h4 {
-                margin: 0 0 5px;
-                color: #777;
-            }
-            .legend {
-                text-align: left;
-                line-height: 18px;
-                color: #555;
-            }
-            .legend i {
-                width: 18px;
-                height: 18px;
-                float: left;
-                margin-right: 8px;
-                opacity: 0.7;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="map"></div>
-
-        <script type="text/javascript" src="israel-areas.js"></script>
-        <script type="text/javascript" src="polls_21.js"></script>
-        <script type="text/javascript" src="polls_22.js"></script>
-        <script type="text/javascript" src="polls_23.js"></script>
-        <script type="text/javascript" src="polls_25.js"></script>
-
-        <script type="text/javascript">
-            const getPoll = (n) =>
-                ({
-                    21: POLLS_21,
-                    22: POLLS_22,
-                    23: POLLS_23,
-                    25: POLLS_25,
-                }[n]);
-            const getParty = (n) =>
-                ({
-                    21: ISRAEL_PARTIES_21,
-                    22: ISRAEL_PARTIES_22,
-                    23: ISRAEL_PARTIES_23,
-                    25: ISRAEL_PARTIES_25,
-                }[n]);
-            let currentPoll = "25";
-            let POLLS = getPoll(currentPoll);
-            let ISRAEL_PARTIES = getParty(currentPoll);
-            let currentParty = "מחל";
-            const map = L.map("map").setView([31.5, 35], 8);
-
-            const tiles = L.tileLayer(
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
-                    maxZoom: 19,
-                    attribution:
-                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                }
-            ).addTo(map);
-
-            // control that shows state info on hover
-            const controls = L.control();
-
-            controls.onAdd = function (map) {
-                this._div = L.DomUtil.create("div", "controls");
-                this.update();
-                return this._div;
-            };
-            const capitalize = (s) =>
-                s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : "";
-            controls.update = function (props) {
-                const poll = props ? POLLS[props.SEMEL_YISHUV] : null;
-
-                const contents = props
-                    ? `<h4>${capitalize(props.SHEM_YISHUV)} / ${capitalize(
-                          props.SHEM_YISHUV_ENGLISH
-                      )}</h4>` +
-                      Object.values(ISRAEL_PARTIES)
-                          .map(
-                              ({ id, englishName, hebrewName }) =>
-                                  (id === currentParty ? "<strong>" : "") +
-                                  `${hebrewName} / ${englishName} - ${
-                                      poll
-                                          ? (
-                                                (100 * poll.results[id]) /
-                                                poll.valid
-                                            ).toFixed(0)
-                                          : 0
-                                  }%` +
-                                  (id === currentParty ? "</strong>" : "") +
-                                  "<br>"
-                          )
-                          .join("")
-                    : "Hover over an area";
-                this._div.innerHTML = `<h4>Israel poll results</h4>${contents}`;
-            };
-
-            controls.addTo(map);
-
-            // get color depending on population density value
-            function getColor(d) {
-                return d > 70
-                    ? "#800026"
-                    : d > 60
-                    ? "#BD0026"
-                    : d > 50
-                    ? "#E31A1C"
-                    : d > 40
-                    ? "#FC4E2A"
-                    : d > 30
-                    ? "#FD8D3C"
-                    : d > 20
-                    ? "#FEB24C"
-                    : d > 10
-                    ? "#FED976"
-                    : "#FFEDA0";
-            }
-
-            function style(feature) {
-                const poll = POLLS[feature.properties.SEMEL_YISHUV];
-                return {
-                    weight: 1,
-                    opacity: 1,
-                    color: "white",
-                    dashArray: "3",
-                    fillOpacity: 0.7,
-                    fillColor: poll
-                        ? getColor(
-                              (100 * poll.results[currentParty]) / poll.valid
-                          )
-                        : "#fff",
-                };
-            }
-
-            function highlightFeature(e) {
-                const layer = e.target;
-
-                layer.setStyle({
-                    weight: 3,
-                    color: "#666",
-                    dashArray: "",
-                    fillOpacity: 0.7,
-                });
-
-                layer.bringToFront();
-
-                controls.update(layer.feature.properties);
-            }
-
-            /* global AREAS_DATA */
-            const geojson = L.geoJson(
-                {
-                    features: AREAS_DATA.features.filter(
-                        (f) => POLLS[f.properties.SEMEL_YISHUV]
-                    ),
-                },
-                {
-                    style,
-                    onEachFeature,
-                }
-            ).addTo(map);
-
-            function resetHighlight(e) {
-                geojson.resetStyle(e.target);
-                controls.update();
-            }
-
-            function zoomToFeature(e) {
-                map.fitBounds(e.target.getBounds());
-            }
-
-            function onEachFeature(feature, layer) {
-                layer.on({
-                    mouseover: highlightFeature,
-                    mouseout: resetHighlight,
-                    click: zoomToFeature,
-                });
-            }
-
-            const colorLegend = L.control({ position: "bottomright" });
-
-            colorLegend.onAdd = function (map) {
-                const div = L.DomUtil.create("div", "controls legend");
-                const grades = [0, 10, 20, 30, 40, 50, 60, 70];
-                const labels = [];
-                let from, to;
-
-                for (let i = 0; i < grades.length; i++) {
-                    from = grades[i];
-                    to = grades[i + 1];
-
-                    labels.push(
-                        `<i style="background:${getColor(
-                            from + 1
-                        )}"></i> ${from}${to ? `&ndash;${to}` : "+"}`
-                    );
-                }
-
-                const selectPolls = `<select id="selectPolls">
-                    ${["21", "22", "23", "25"].map(
-                        (n) =>
-                            `<option value="${n}" ${
-                                currentPoll === n ? "selected" : ""
-                            }>Polls ${n}</option>`
-                    )}
-                </select><br><br>`;
-
-                const selectParty = `<select id="selectParty">${Object.values(
-                    ISRAEL_PARTIES
-                ).map(
-                    ({ id, englishName, hebrewName }) =>
-                        `<option value=${id} ${
-                            id === currentParty ? "selected" : ""
-                        }>${hebrewName} / ${englishName}</option>`
-                )}</select><br><br>`;
-
-                div.innerHTML = selectPolls + selectParty + labels.join("<br>");
-
-                div.querySelector("#selectPolls").addEventListener(
-                    "change",
-                    (e) => {
-                        currentPoll = e.target.value;
-                        POLLS = getPoll(currentPoll);
-                        ISRAEL_PARTIES = getParty(currentPoll);
-                        if (ISRAEL_PARTIES[currentParty] == null) {
-                            currentParty = "מחל";
-                        }
-                        colorLegend.remove();
-                        colorLegend.addTo(map);
-                        geojson.setStyle(style);
-                    }
-                );
-
-                div.querySelector("#selectParty").addEventListener(
-                    "change",
-                    (e) => {
-                        currentParty = e.target.value;
-                        geojson.setStyle(style);
-                    }
-                );
-                return div;
-            };
-
-            colorLegend.addTo(map);
-        </script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
+    />
+    <meta name="theme-color" content="#193f32" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Israel Election Results Explorer" />
+    <meta property="og:title" content="Israel Election Results Explorer" />
+    <meta
+      property="og:description"
+      content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
+    />
+    <meta property="og:image" content="/social-preview.png" />
+    <meta property="og:image:alt" content="Israel Election Results Explorer map preview" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Israel Election Results Explorer" />
+    <meta
+      name="twitter:description"
+      content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
+    />
+    <meta name="twitter:image" content="/social-preview.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>Israel Election Results Explorer | Knesset 21–25</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

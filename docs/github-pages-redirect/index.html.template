@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Israel Election Results Explorer has moved</title>
+  </head>
+  <body>
+    <p id="redirect-status">This project has moved. Redirecting...</p>
+    <script>
+      // Before publishing, replace this token with the verified production Vercel URL.
+      // It must be an HTTPS origin only; query strings and hashes are retained.
+      const configuredCanonicalUrl = "__CANONICAL_VERCEL_URL__";
+      const status = document.getElementById("redirect-status");
+
+      try {
+        if (configuredCanonicalUrl === "__CANONICAL_VERCEL_URL__") throw new Error("unconfigured");
+        const canonicalUrl = new URL(configuredCanonicalUrl);
+        if (
+          canonicalUrl.protocol !== "https:" ||
+          !canonicalUrl.hostname ||
+          canonicalUrl.username ||
+          canonicalUrl.password ||
+          canonicalUrl.pathname !== "/" ||
+          canonicalUrl.search ||
+          canonicalUrl.hash
+        ) {
+          throw new Error("invalid");
+        }
+        window.location.replace(
+          `${canonicalUrl.origin}${window.location.pathname}${window.location.search}${window.location.hash}`,
+        );
+      } catch {
+        status.textContent =
+          "The new project URL is not configured safely. Please return to the project repository.";
+      }
+    </script>
+  </body>
+</html>
