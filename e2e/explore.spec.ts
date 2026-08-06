@@ -73,6 +73,8 @@ test("a shared explore URL restores election, list, and locality", async ({ page
   await page.goto(`/?mode=explore&election=25&party=%D7%9E%D7%97%D7%9C&locality=${LOCALITY_ID}`);
 
   await expect(page.getByTestId("election-select")).toHaveValue("25");
+  await expect(page.getByTestId("party-select")).toHaveValue("מחל");
+  await expect(page.getByTestId("no-party-selected")).toHaveCount(0);
   await expect(page.getByTestId("selected-locality")).toBeVisible();
   await expect(page.getByTestId("party-breakdown")).toBeVisible();
 });
@@ -81,15 +83,33 @@ test("compare mode loads independent A and B list controls and encodes them in t
   page,
 }) => {
   await page.goto("/");
+  await expect(page.getByTestId("party-select")).toHaveValue("");
   await page.getByTestId("mode-compare").click();
   await expect(page.getByTestId("comparison-controls")).toBeVisible();
   await expect(page.getByTestId("compare-election-select")).toBeVisible();
   await expect(page.getByTestId("compare-party-select")).toBeVisible();
-  await expect(page).toHaveURL(/mode=compare/);
-  await expect(page).toHaveURL(/compareElection=/);
+  await expect(page.getByTestId("party-select")).not.toHaveValue("");
+  const comparisonParams = new URL(page.url()).searchParams;
+  expect(comparisonParams.get("mode")).toBe("compare");
+  expect(comparisonParams.get("party")).not.toBeFalsy();
+  expect(comparisonParams.get("compareElection")).not.toBeFalsy();
+  expect(comparisonParams.get("compareParty")).not.toBeFalsy();
   await page.getByTestId("locality-search").fill("Jerusalem");
   await page.getByTestId(`locality-match-${LOCALITY_ID}`).click();
   await expect(page.getByTestId("selected-locality")).toContainText("Independent A / B");
+});
+
+test("leaving party-less Explore for Table chooses and serializes a valid party", async ({
+  page,
+}) => {
+  await page.goto("/?mode=explore&election=25");
+  await expect(page.getByTestId("party-select")).toHaveValue("");
+
+  await page.getByTestId("mode-table").click();
+
+  await expect(page.getByTestId("party-select")).not.toHaveValue("");
+  await expect(page).toHaveURL(/mode=table/);
+  await expect(page).toHaveURL(/party=/);
 });
 
 test("a shared comparison URL restores the comparison table and delta column", async ({ page }) => {
