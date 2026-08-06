@@ -66,19 +66,6 @@ export function analysisCsv(
   );
 }
 
-export function downloadText(filename: string, contents: string, type = "text/csv;charset=utf-8") {
-  downloadBlob(filename, new Blob([contents], { type }));
-}
-
-export function downloadBlob(filename: string, blob: Blob) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  window.setTimeout(() => URL.revokeObjectURL(url), 0);
-}
-
 type ExportMap = {
   features: readonly ExplorerFeature[];
   rows: readonly LocalityResult[];
@@ -154,32 +141,6 @@ export function analysisSvg(map: ExportMap): string {
         .join("") +
       `<text x="70" y="565" class="small">Lower share ← locality vote share → higher share</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><style>.title{font:500 48px Georgia,serif;fill:#102a43}.body{font:400 22px Arial,sans-serif;fill:#314e68}.small{font:400 16px Arial,sans-serif;fill:#5f7182}.label{font:700 14px Arial,sans-serif;letter-spacing:2px;fill:#41627e}</style><rect width="100%" height="100%" fill="#f4f8fc"/><text x="70" y="100" class="label">ISRAEL ELECTION RESULTS EXPLORER</text><text x="70" y="165" class="title">${escapeXml(map.title)}</text><text x="70" y="210" class="body">${escapeXml(map.context)}</text><line x1="70" x2="390" y1="250" y2="250" stroke="#c8d9e8"/><text x="70" y="300" class="label">KEY INSIGHT</text><text x="70" y="345" class="body">${escapeXml(map.insight)}</text><text x="70" y="505" class="label">MAP LEGEND</text>${legend}<rect x="${mapLeft - 12}" y="${mapTop - 12}" width="${mapWidth + 24}" height="${mapHeight + 24}" fill="#e9f3fb" stroke="#c8d9e8"/>${paths}<text x="70" y="820" class="small">${escapeXml(map.source)}</text><text x="70" y="855" class="small">israel-election-results.vercel.app</text></svg>`;
-}
-
-export async function pngFromSvg(svg: string): Promise<Blob> {
-  const image = new Image();
-  const source = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
-  try {
-    await new Promise<void>((resolve, reject) => {
-      image.onload = () => resolve();
-      image.onerror = () => reject(new Error("Could not render the local vector export."));
-      image.src = source;
-    });
-    const canvas = document.createElement("canvas");
-    canvas.width = 1600;
-    canvas.height = 900;
-    const context = canvas.getContext("2d");
-    if (!context) throw new Error("Your browser cannot create image exports.");
-    context.drawImage(image, 0, 0);
-    return await new Promise<Blob>((resolve, reject) =>
-      canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject(new Error("Could not create the PNG export."))),
-        "image/png",
-      ),
-    );
-  } finally {
-    URL.revokeObjectURL(source);
-  }
 }
 
 function escapeXml(value: string): string {

@@ -63,6 +63,7 @@ export function ExplorePanel(props: {
         <label for="locality-search">Find a locality</label>
         <input
           id="locality-search"
+          name="locality-search"
           data-testid="locality-search"
           value={props.search}
           onInput={(event) => props.setSearch(event.currentTarget.value)}

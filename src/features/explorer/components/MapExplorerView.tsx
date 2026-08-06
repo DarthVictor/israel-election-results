@@ -1,69 +1,43 @@
 import { Show } from "solid-js";
-import type {
-  AnalysisState,
-  ElectionResultsFile,
-  LocalityResult,
-  PartyList,
-} from "../../../domain/contracts";
 import { LeafletMap } from "../LeafletMap";
+import type { createMapView } from "../views/create-map-view";
 import { MapLegend } from "./MapLegend";
 import { ErrorPanel } from "./StatusPanels";
-import type { ExplorerFeature } from "../topology";
 
-export function MapExplorerView(props: {
-  state: AnalysisState;
-  geometry: ExplorerFeature[];
-  geometryError: unknown;
-  currentResults?: ElectionResultsFile;
-  rows: LocalityResult[];
-  comparisonRows: LocalityResult[];
-  comparisonReady: boolean;
-  comparisonError: unknown;
-  loadingComparison: boolean;
-  compareParty?: PartyList;
-  resultsError: unknown;
-  onSelect(localityId: number): void;
-  onRetryLoad(): void;
-}) {
+export function MapExplorerView(props: { map: ReturnType<typeof createMapView> }) {
   return (
     <section class="map-region" aria-label="Election result map" data-testid="map-region">
-      <Show when={props.geometryError}>
+      <Show when={props.map.geometryError()}>
         <div class="map-error">
-          <ErrorPanel compact error={props.geometryError} onRetry={props.onRetryLoad} />
+          <ErrorPanel compact error={props.map.geometryError()} onRetry={props.map.onRetryLoad} />
         </div>
       </Show>
       <Show
-        when={
-          !props.geometryError &&
-          props.geometry.length > 0 &&
-          props.currentResults &&
-          (props.state.mode !== "compare" || props.comparisonReady)
-        }
+        when={props.map.ready()}
         fallback={
           <div class="map-placeholder" data-testid="map-unavailable">
-            {props.state.mode === "compare" && props.comparisonError
-              ? "Comparison results are unavailable. Try again to restore the comparison map."
-              : props.state.mode === "compare" && props.loadingComparison
-                ? "Loading comparison results…"
-                : props.resultsError
-                  ? "Selected election results are unavailable. Try again to restore the map."
-                  : "Loading map boundaries…"}
+            {props.map.unavailableMessage()}
           </div>
         }
       >
         <LeafletMap
-          features={props.geometry}
-          rows={props.rows}
-          partyId={props.state.party}
-          selectedLocalityId={props.state.locality}
-          onSelect={props.onSelect}
-          {...(props.comparisonReady
-            ? { comparison: { rows: props.comparisonRows, partyId: props.compareParty!.id } }
+          features={props.map.geometry()}
+          rows={props.map.rows()}
+          partyId={props.map.state().party}
+          selectedLocalityId={props.map.state().locality}
+          onSelect={props.map.onSelect}
+          {...(props.map.comparisonReady()
+            ? {
+                comparison: {
+                  rows: props.map.comparisonRows(),
+                  partyId: props.map.compareParty()!.id,
+                },
+              }
             : {})}
         />
       </Show>
-      <Show when={props.state.mode !== "compare" || props.comparisonReady}>
-        <MapLegend compareMode={props.comparisonReady} />
+      <Show when={props.map.state().mode !== "compare" || props.map.comparisonReady()}>
+        <MapLegend compareMode={props.map.comparisonReady()} />
       </Show>
     </section>
   );

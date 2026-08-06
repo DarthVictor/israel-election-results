@@ -1,5 +1,5 @@
 # Application shell
 
-`app/` owns top-level composition and cross-feature wiring. Product UI is added
-in later phases; it should depend on domain contracts rather than generated data
-file details.
+`app/` owns top-level composition and browser-only adapters. `App.tsx` creates
+the Explorer feature from `create-browser-explorer-dependencies.ts`; feature
+layout and UI live under `features/explorer/`.

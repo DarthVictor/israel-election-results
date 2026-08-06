@@ -8,12 +8,23 @@ Preserve the current election-exploration experience while separating election r
 
 Each numbered stage is completed independently. For every stage, an implementation agent makes the smallest behavior-preserving change, a review agent reviews the resulting diff, and a fixing agent resolves confirmed review findings before the next stage starts. Every stage must pass its listed checks; visual redesigns and feature changes are out of scope.
 
+## Completed architecture
+
+The refactor is complete. `App.tsx` is a composition root: it creates browser
+dependencies and renders the Explorer page. The feature exposes six grouped
+public slices—`selection`, `loading`, `explore`, `table`, `map`, and
+`actions`—from `createExplorerFeature`. Browser capabilities are injected by
+the application boundary; domain rules, view models, and components do not
+read browser globals directly.
+
 ## Target shape
 
 ```text
 src/
   app/
-    App.tsx                         # composition root only
+    App.tsx                         # minimal composition root
+    create-browser-explorer-dependencies.ts
+    browser-export-adapters.ts
   domain/
     contracts.ts
     explorer/                        # pure rules and types; no Solid or browser APIs
@@ -23,24 +34,24 @@ src/
       table.ts
       analysis.ts
   features/explorer/
-    controller/
-      create-explorer-controller.ts
-      explorer-dependencies.ts
+    ExplorerPage.tsx                 # feature page/layout composition
+    feature/
+      create-explorer-feature.ts      # grouped feature composition
+      explorer-feature.types.ts
+    loaders/                          # abort-safe static data lifecycles
+    selection/                        # URL-backed analysis selection
+    views/                            # Explore, Table, and Map view models
+    actions/                          # injected clipboard/export feedback
     components/
-      ExplorerControls.tsx
-      ExploreInsights.tsx
-      LocalitySearch.tsx
+      AnalysisControls.tsx
+      ExplorePanel.tsx
       LocalityDetails.tsx
       ComparisonDetails.tsx
       LocalityTable.tsx
       MapLegend.tsx
       StatusPanels.tsx
-    adapters/
-      static-election-repository.ts
-      browser-history.ts
-      browser-clipboard.ts
-      browser-downloads.ts
-      leaflet-map.tsx
+    data.ts                           # static election repository
+    topology.ts                       # GeoJSON conversion boundary
 ```
 
 ## 1. Safety baseline and characterization tests
@@ -53,12 +64,12 @@ src/
 
 **Exit criteria:** all baseline gates pass and the new tests describe behavior, not implementation details.
 
-## 2. Domain glossary and controller decision
+## 2. Domain glossary and feature-composition decision
 
 **Purpose:** establish durable vocabulary before naming modules and types.
 
 - Maintain root `CONTEXT.md` as the source of truth for Election, Party List, Analysis Selection, Explore Analysis, Comparison Analysis, Locality Result, and Mappable Locality.
-- Keep the controller-boundary decision in `docs/adr/0001-explorer-controller-boundary.md`.
+- Keep the feature-boundary decision in `docs/adr/0001-explorer-feature-boundary.md`.
 - Use the glossary names in new public types, test descriptions, and UI-facing labels where appropriate.
 
 **Exit criteria:** terminology is precise, historical Party Lists remain election-scoped, and comparison claims do not imply political identity across elections.
@@ -74,17 +85,17 @@ src/
 
 **Exit criteria:** pure modules hold election rules with direct, focused tests; `App.tsx` no longer contains pure domain calculations.
 
-## 4. Testable Solid Explorer controller
+## 4. Testable Solid Explorer feature
 
 **Purpose:** isolate reactive orchestration from markup.
 
-- Build `create-explorer-controller` around Solid signals and memos.
+- Build `createExplorerFeature` around focused Solid factories and grouped slices.
 - Inject a repository, history gateway, clipboard/download gateway, and export service through a narrow dependencies interface.
-- Move manifest/election/geometry loading, stale-request protection, retry/error state, selection actions, URL synchronization, copy-link, and export coordination into the controller.
+- Move manifest/election/geometry loading, stale-request protection, retry/error state, selection actions, URL synchronization, copy-link, and export coordination into feature slices.
 - Use effects only for external side effects; use memos only for derived values; keep teardown for subscriptions/listeners explicit.
-- Test controller behavior with fakes rather than Leaflet or browser globals.
+- Test feature behavior with fakes rather than Leaflet or browser globals.
 
-**Exit criteria:** state transitions and async recovery are testable without rendering a component; components only consume controller state and invoke actions.
+**Exit criteria:** state transitions and async recovery are testable without rendering a component; components only consume prepared feature slices and invoke actions.
 
 ## 5. Presentation component extraction
 
@@ -110,7 +121,7 @@ src/
 
 **Purpose:** finish with a small, maintainable application root.
 
-- Simplify `App.tsx` to controller creation plus layout composition; target fewer than 150 lines unless a documented accessibility/layout need requires more.
+- Simplify `App.tsx` to feature creation and page composition; target fewer than 150 lines unless a documented accessibility/layout need requires more.
 - Remove dead glue only after all imports and behavior checks are green.
 - Run formatter, data validation/build, lint, typecheck, unit tests, and Chromium E2E tests.
 - Conduct a final architecture and UI/accessibility review, then resolve confirmed findings.

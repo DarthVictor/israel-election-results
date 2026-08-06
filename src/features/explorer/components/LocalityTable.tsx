@@ -26,39 +26,47 @@ export function LocalityTable(props: {
     <section class="table-panel" data-testid="table-panel">
       <h2>Locality table</h2>
       <input
+        name="table-locality-filter"
         aria-label="Filter table localities"
         value={props.tableSearch}
         onInput={(event) => props.setTableSearch(event.currentTarget.value)}
         placeholder="Filter locality name"
+        autocomplete="off"
       />
       <div class="filter-grid">
         <label>
           Min turnout
           <input
+            name="min-turnout"
             type="number"
             min="0"
             max="100"
             value={props.state.turnoutMin ?? ""}
             onInput={(event) => numeric("turnoutMin", event.currentTarget.value)}
+            autocomplete="off"
           />
         </label>
         <label>
           Min share
           <input
+            name="min-share"
             type="number"
             min="0"
             max="100"
             value={props.state.shareMin ?? ""}
             onInput={(event) => numeric("shareMin", event.currentTarget.value)}
+            autocomplete="off"
           />
         </label>
         <label>
           Min valid ballots
           <input
+            name="min-valid-ballots"
             type="number"
             min="0"
             value={props.state.minValidVotes ?? ""}
             onInput={(event) => numeric("minValidVotes", event.currentTarget.value)}
+            autocomplete="off"
           />
         </label>
       </div>

@@ -2,6 +2,18 @@ import { expect, test } from "@playwright/test";
 
 const LOCALITY_ID = 3000;
 
+test("keyboard skip link moves focus to the explorer content", async ({ page }) => {
+  await page.goto("/");
+  const skipLink = page.getByRole("link", { name: "Skip to election explorer" });
+
+  await page.keyboard.press("Tab");
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toBeVisible();
+  await page.keyboard.press("Enter");
+
+  await expect(page.locator("#explorer-content")).toBeFocused();
+});
+
 test("search selection updates the shareable URL", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("election-select")).toHaveValue("25");

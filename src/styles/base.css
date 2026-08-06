@@ -43,6 +43,22 @@ a:focus-visible {
   min-height: 100vh;
   padding: 1.25rem;
 }
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0.75rem;
+  left: 0.75rem;
+  transform: translateY(-200%);
+  border-radius: 0.45rem;
+  background: #102a43;
+  padding: 0.6rem 0.8rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
 .site-header {
   display: flex;
   align-items: end;
@@ -649,6 +665,7 @@ select {
     box-shadow: 0 -12px 32px rgb(28 75 112 / 0.16);
     transform: translateY(calc(100% - 4.2rem));
     transition: transform 180ms ease-out;
+    touch-action: manipulation;
   }
   .analysis-panel.is-sheet-open {
     transform: translateY(0);
@@ -682,6 +699,7 @@ select {
   .analysis-sheet-content {
     height: calc(100% - 4.2rem);
     overflow: auto;
+    overscroll-behavior: contain;
     padding: 0 1rem 1rem;
   }
   .control-stack {
