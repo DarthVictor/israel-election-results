@@ -35,17 +35,17 @@ pnpm dev
 
 Useful commands:
 
-| Command                                                    | Purpose                                                              |
-| ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| `pnpm data:build`                                      | Rebuild normalized static data after an approved source update.      |
-| `pnpm data:validate`                                   | Validate preserved data without writing generated files.             |
+| Command                                        | Purpose                                                              |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
+| `pnpm data:build`                              | Rebuild normalized static data after an approved source update.      |
+| `pnpm data:validate`                           | Validate preserved data without writing generated files.             |
 | `pnpm format` / `pnpm lint` / `pnpm typecheck` | Check formatting, linting, and types.                                |
-| `pnpm test`                                            | Run unit and data-pipeline tests.                                    |
-| `pnpm build`                                           | Create the production `dist/` bundle.                                |
-| `pnpm bundle:report`                                   | Enforce the production asset-size budgets.                           |
-| `pnpm release:check`                                   | Verify release metadata and required static artifacts after a build. |
-| `pnpm test:e2e:install`                                | Install the Chromium browser used by the CI smoke suite.             |
-| `pnpm test:e2e:chromium`                               | Run the required browser smoke suite.                                |
+| `pnpm test`                                    | Run unit and data-pipeline tests.                                    |
+| `pnpm build`                                   | Create the production `dist/` bundle.                                |
+| `pnpm bundle:report`                           | Enforce the production asset-size budgets.                           |
+| `pnpm release:check`                           | Verify release metadata and required static artifacts after a build. |
+| `pnpm test:e2e:install`                        | Install the Chromium browser used by the CI smoke suite.             |
+| `pnpm test:e2e:chromium`                       | Run the required browser smoke suite.                                |
 
 For Firefox and WebKit release verification, see [e2e/README.md](e2e/README.md).
 
