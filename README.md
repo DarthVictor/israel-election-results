@@ -28,24 +28,24 @@ Raw files are preserved under `data/` and `data/raw/`; generated browser assets 
 Prerequisites: Node.js 24 and pnpm 11.10.0.
 
 ```powershell
-pnpm.cmd install --frozen-lockfile
-pnpm.cmd data:validate
-pnpm.cmd dev
+pnpm install --frozen-lockfile
+pnpm data:validate
+pnpm dev
 ```
 
 Useful commands:
 
 | Command                                                    | Purpose                                                              |
 | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| `pnpm.cmd data:build`                                      | Rebuild normalized static data after an approved source update.      |
-| `pnpm.cmd data:validate`                                   | Validate preserved data without writing generated files.             |
-| `pnpm.cmd format` / `pnpm.cmd lint` / `pnpm.cmd typecheck` | Check formatting, linting, and types.                                |
-| `pnpm.cmd test`                                            | Run unit and data-pipeline tests.                                    |
-| `pnpm.cmd build`                                           | Create the production `dist/` bundle.                                |
-| `pnpm.cmd bundle:report`                                   | Enforce the production asset-size budgets.                           |
-| `pnpm.cmd release:check`                                   | Verify release metadata and required static artifacts after a build. |
-| `pnpm.cmd test:e2e:install`                                | Install the Chromium browser used by the CI smoke suite.             |
-| `pnpm.cmd test:e2e:chromium`                               | Run the required browser smoke suite.                                |
+| `pnpm data:build`                                      | Rebuild normalized static data after an approved source update.      |
+| `pnpm data:validate`                                   | Validate preserved data without writing generated files.             |
+| `pnpm format` / `pnpm lint` / `pnpm typecheck` | Check formatting, linting, and types.                                |
+| `pnpm test`                                            | Run unit and data-pipeline tests.                                    |
+| `pnpm build`                                           | Create the production `dist/` bundle.                                |
+| `pnpm bundle:report`                                   | Enforce the production asset-size budgets.                           |
+| `pnpm release:check`                                   | Verify release metadata and required static artifacts after a build. |
+| `pnpm test:e2e:install`                                | Install the Chromium browser used by the CI smoke suite.             |
+| `pnpm test:e2e:chromium`                               | Run the required browser smoke suite.                                |
 
 For Firefox and WebKit release verification, see [e2e/README.md](e2e/README.md).
 
@@ -65,15 +65,15 @@ The application is a static Vite build for Vercel.
 GitHub Actions checks formatting, linting, types, unit/data tests, data validation, a production build, asset-size budgets, release artifacts, and Chromium E2E. Run the same checks before submitting a change:
 
 ```powershell
-pnpm.cmd format
-pnpm.cmd lint
-pnpm.cmd typecheck
-pnpm.cmd test
-pnpm.cmd data:validate
-pnpm.cmd build
-pnpm.cmd bundle:report
-pnpm.cmd release:check
-pnpm.cmd test:e2e:chromium
+pnpm format
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm data:validate
+pnpm build
+pnpm bundle:report
+pnpm release:check
+pnpm test:e2e:chromium
 ```
 
 This project is a neutral visualization of official election results, not a poll, forecast, or endorsement.
