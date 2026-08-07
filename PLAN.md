@@ -1,4 +1,11 @@
 Israel Election Results Explorer — Rebuild Plan
+
+> **Status: completed. Historical record — not outstanding work.**
+> This plan describes the original rebuild and has been delivered in full. It is
+> kept for provenance; it is not a to-do list, and it does not reflect later
+> decisions. For current architecture see docs/adr/, and for the shipped data
+> pipeline see scripts/.
+
 Summary
 Rebuild the project as a standalone SolidJS + TypeScript data product deployed on Vercel. The experience will cover Knesset elections 21–25, use an editorial data-journalism visual style, and retain official Hebrew names inside an English interface.
 The application will remain fully static: election data is normalized during the build, then compact files are loaded in the browser as needed. Leaflet remains the interactive map engine.

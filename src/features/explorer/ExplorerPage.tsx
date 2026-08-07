@@ -202,7 +202,6 @@ export function ExplorerPage(props: {
           Map: <a href="https://leafletjs.com/">Leaflet</a> and{" "}
           <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
         </span>
-        <a href="https://github.com/DarthVictor/israel-polls">Project source &amp; methodology</a>
       </footer>
     </div>
   );

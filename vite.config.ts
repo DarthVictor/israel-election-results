@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { loadEnv } from "vite";
 import solid from "vite-plugin-solid";
 
 const siteUrlFor = (rawValue: string | undefined, requireValue: boolean): string | undefined => {
@@ -39,7 +40,10 @@ const siteUrlFor = (rawValue: string | undefined, requireValue: boolean): string
 
 export default defineConfig(({ command, mode }) => {
   const productionBuild = command === "build" && mode === "production";
-  const siteUrl = siteUrlFor(process.env.VITE_SITE_URL, productionBuild);
+  // `.env` is not visible on `process.env` during config resolution, so read it
+  // explicitly. An ambient VITE_SITE_URL still wins, which is how CI overrides it.
+  const fileEnv = loadEnv(mode, process.cwd(), "VITE_");
+  const siteUrl = siteUrlFor(process.env.VITE_SITE_URL ?? fileEnv.VITE_SITE_URL, productionBuild);
 
   return {
     plugins: [

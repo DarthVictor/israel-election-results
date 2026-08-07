@@ -1,7 +1,14 @@
 {
-  "name": "israel-election-results-explorer",
+  "name": "israel-election-results",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Client-side explorer for final locality-level results from Israeli Knesset elections 21–25.",
+  "homepage": "https://israel-election-results.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarthVictor/israel-election-results.git"
+  },
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@11.10.0",
   "scripts": {

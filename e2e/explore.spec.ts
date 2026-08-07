@@ -47,7 +47,7 @@ test("shows source attribution and portfolio project documentation", async ({ pa
   );
   await expect(page.getByRole("link", { name: /Project source/i })).toHaveAttribute(
     "href",
-    "https://github.com/DarthVictor/israel-polls",
+    "https://github.com/DarthVictor/israel-election-results",
   );
 });
 

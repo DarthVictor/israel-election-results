@@ -1,7 +1,5 @@
 # Israel Election Results Explorer
 
-[![CI](https://github.com/DarthVictor/israel-polls/actions/workflows/ci.yml/badge.svg)](https://github.com/DarthVictor/israel-polls/actions/workflows/ci.yml)
-
 An accessible, client-side explorer for final locality-level results from Israeli Knesset elections 21–25 (2019–2022). It turns official Central Elections Committee returns into an interactive map, locality profile, sortable table, independent A/B comparison, and shareable/exportable analysis.
 
 ## Portfolio summary
