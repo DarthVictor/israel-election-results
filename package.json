@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Client-side explorer for final locality-level results from Israeli Knesset elections 21–25.",
-  "homepage": "https://israel-election-results.vercel.app",
+  "homepage": "https://israel-election-results.darthvictor.xyz",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DarthVictor/israel-election-results.git"

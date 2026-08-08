@@ -1,3 +1,4 @@
+import { SITE_HOST } from "../../site";
 import type {
   AnalysisState,
   ElectionMetadata,
@@ -140,7 +141,7 @@ export function analysisSvg(map: ExportMap): string {
         )
         .join("") +
       `<text x="70" y="565" class="small">Lower share ← locality vote share → higher share</text>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><style>.title{font:500 48px Georgia,serif;fill:#102a43}.body{font:400 22px Arial,sans-serif;fill:#314e68}.small{font:400 16px Arial,sans-serif;fill:#5f7182}.label{font:700 14px Arial,sans-serif;letter-spacing:2px;fill:#41627e}</style><rect width="100%" height="100%" fill="#f4f8fc"/><text x="70" y="100" class="label">ISRAEL ELECTION RESULTS EXPLORER</text><text x="70" y="165" class="title">${escapeXml(map.title)}</text><text x="70" y="210" class="body">${escapeXml(map.context)}</text><line x1="70" x2="390" y1="250" y2="250" stroke="#c8d9e8"/><text x="70" y="300" class="label">KEY INSIGHT</text><text x="70" y="345" class="body">${escapeXml(map.insight)}</text><text x="70" y="505" class="label">MAP LEGEND</text>${legend}<rect x="${mapLeft - 12}" y="${mapTop - 12}" width="${mapWidth + 24}" height="${mapHeight + 24}" fill="#e9f3fb" stroke="#c8d9e8"/>${paths}<text x="70" y="820" class="small">${escapeXml(map.source)}</text><text x="70" y="855" class="small">israel-election-results.vercel.app</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><style>.title{font:500 48px Georgia,serif;fill:#102a43}.body{font:400 22px Arial,sans-serif;fill:#314e68}.small{font:400 16px Arial,sans-serif;fill:#5f7182}.label{font:700 14px Arial,sans-serif;letter-spacing:2px;fill:#41627e}</style><rect width="100%" height="100%" fill="#f4f8fc"/><text x="70" y="100" class="label">ISRAEL ELECTION RESULTS EXPLORER</text><text x="70" y="165" class="title">${escapeXml(map.title)}</text><text x="70" y="210" class="body">${escapeXml(map.context)}</text><line x1="70" x2="390" y1="250" y2="250" stroke="#c8d9e8"/><text x="70" y="300" class="label">KEY INSIGHT</text><text x="70" y="345" class="body">${escapeXml(map.insight)}</text><text x="70" y="505" class="label">MAP LEGEND</text>${legend}<rect x="${mapLeft - 12}" y="${mapTop - 12}" width="${mapWidth + 24}" height="${mapHeight + 24}" fill="#e9f3fb" stroke="#c8d9e8"/>${paths}<text x="70" y="820" class="small">${escapeXml(map.source)}</text><text x="70" y="855" class="small">${SITE_HOST}</text></svg>`;
 }
 
 function escapeXml(value: string): string {

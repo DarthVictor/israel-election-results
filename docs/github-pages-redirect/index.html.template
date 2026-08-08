@@ -9,13 +9,11 @@
   <body>
     <p id="redirect-status">This project has moved. Redirecting...</p>
     <script>
-      // Before publishing, replace this token with the verified production Vercel URL.
-      // It must be an HTTPS origin only; query strings and hashes are retained.
-      const configuredCanonicalUrl = "__CANONICAL_VERCEL_URL__";
+      // The canonical production origin. Query strings and hashes are retained.
+      const configuredCanonicalUrl = "https://israel-election-results.darthvictor.xyz";
       const status = document.getElementById("redirect-status");
 
       try {
-        if (configuredCanonicalUrl === "__CANONICAL_VERCEL_URL__") throw new Error("unconfigured");
         const canonicalUrl = new URL(configuredCanonicalUrl);
         if (
           canonicalUrl.protocol !== "https:" ||
