@@ -1,4 +1,4 @@
-import type { ElectionId, PartyList } from "../../src/domain/contracts.ts";
+import type { ElectionId, PartyList } from "../domain/contracts.ts";
 
 type PartyMetadata = PartyList;
 
@@ -262,5 +262,3 @@ const electionSources = [
 ] as const satisfies readonly ElectionSource[];
 
 export const ELECTION_SOURCES: readonly ElectionSource[] = electionSources;
-
-export const partiesFor = (source: ElectionSource): PartyList[] => [...source.parties];

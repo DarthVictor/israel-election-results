@@ -19,18 +19,10 @@
     "lint": "eslint .",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "bundle:report": "node scripts/report-bundle-size.mjs",
-    "release:check": "node scripts/release-check.mjs",
-    "assets:build": "node scripts/generate-brand-assets.mjs",
-    "data:build": "node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/data/build.ts",
-    "data:validate": "node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/data/build.ts --validate-only",
-    "data:test": "vitest run scripts/data",
+    "data:build": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/build.ts",
+    "data:test": "vitest run src/data",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "test:e2e": "playwright test",
-    "test:e2e:chromium": "playwright test --project=chromium",
-    "test:e2e:install": "playwright install chromium",
-    "test:e2e:install:all": "playwright install chromium firefox webkit"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -38,9 +30,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.62.1",
     "@types/leaflet": "^1.9.22",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.13.3",
     "@types/topojson-specification": "^1.0.5",
     "eslint": "^10.8.0",
     "eslint-plugin-solid": "^0.14.5",

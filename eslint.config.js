@@ -5,14 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: [
-      "dist",
-      "node_modules",
-      "coverage",
-      "playwright-report",
-      "test-results",
-      "data/raw/localities.js",
-    ],
+    ignores: ["dist", "node_modules", "coverage", "data/raw/localities.js"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,7 +17,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["*.{js,ts}", "scripts/**/*.{js,mjs,ts}"],
+    files: ["*.{js,ts}", "scripts/**/*.{js,mjs,ts}", "src/data/**/*.ts"],
     languageOptions: {
       globals: globals.node,
     },
