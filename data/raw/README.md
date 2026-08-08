@@ -1,7 +1,7 @@
 # Raw election sources
 
 Keep source CSV/XLS files here without manual edits. The normalization script in
-`scripts/data/` reads these artifacts and produces versioned browser data files.
+`src/data/` reads these artifacts and produces versioned browser data files.
 
 All five election CSVs in this directory are final locality-level exports retrieved
 from the Central Elections Committee on 2026-08-05 and are preserved byte for byte.
@@ -31,4 +31,4 @@ removed; unlike the election CSVs it is not a byte-preserved original.
 
 All election list names and ballot codes are verified against each election's
 official Central Elections Committee national-results page in
-`scripts/data/sources.ts`.
+`src/data/sources.ts`.

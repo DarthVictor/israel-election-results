@@ -15,11 +15,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "data:build": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/build.ts",
+    "data:validate": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/build.ts --validate-only",
     "data:test": "vitest run src/data",
     "test": "vitest run",
     "test:watch": "vitest"

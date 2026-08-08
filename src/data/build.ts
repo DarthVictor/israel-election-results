@@ -102,4 +102,14 @@ const write = async () => {
   );
 };
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) await write();
+/** Checks the preserved raw sources without touching public/data/generated. */
+const validate = async () => {
+  const output = await build();
+  console.log(
+    `Validated ${output.results.length} elections and ${output.unmatchedReport.geometryLocalityCount} locality boundaries.`,
+  );
+};
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  await (process.argv.includes("--validate-only") ? validate() : write());
+}
