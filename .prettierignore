@@ -5,11 +5,7 @@ playwright-report
 test-results
 .agents
 *.min.js
-polls_*.js
-israel-areas.js
-data/csv2js.js
-legacy/
 PLAN.md
 pnpm-lock.yaml
 public/data/generated/
-data/raw/localities.js
+data/raw/localities.json

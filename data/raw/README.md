@@ -4,9 +4,13 @@ Keep source CSV/XLS files here without manual edits. The normalization script in
 `scripts/data/` reads these artifacts and produces versioned browser data files.
 
 All five election CSVs in this directory are final locality-level exports retrieved
-from the Central Elections Committee on 2026-08-05. The pipeline uses these files
-as its only election input. `localities.js` is the preserved boundary source used
-to generate the compact TopoJSON map asset.
+from the Central Elections Committee on 2026-08-05 and are preserved byte for byte.
+The pipeline uses these files as its only election input.
+
+`localities.json` is the boundary source used to generate the compact TopoJSON map
+asset. It is derived from the Central Bureau of Statistics statistical-areas layer,
+re-serialized as GeoJSON with Hebrew locality names decoded and unused properties
+removed; unlike the election CSVs it is not a byte-preserved original.
 
 ## Official locality exports
 

@@ -42,6 +42,13 @@ export class CsvSyntaxError extends Error {
   }
 }
 
+/**
+ * Absolute ceiling for the generated TopoJSON, in bytes. An absolute budget
+ * catches quantisation or simplification regressions; the previous check only
+ * compared against the raw source, which shrank when it became JSON.
+ */
+const GEOMETRY_BYTE_BUDGET = 1_500_000;
+
 export type CompactGeometry = {
   type: "FeatureCollection";
   features: Array<{
@@ -238,65 +245,26 @@ const assignRanks = (rows: LocalityResult[], partyCodes: readonly string[]): voi
   }
 };
 
-const windows1252Bytes = new Map<number, number>([
-  [0x20ac, 0x80],
-  [0x201a, 0x82],
-  [0x0192, 0x83],
-  [0x201e, 0x84],
-  [0x2026, 0x85],
-  [0x2020, 0x86],
-  [0x2021, 0x87],
-  [0x02c6, 0x88],
-  [0x2030, 0x89],
-  [0x0160, 0x8a],
-  [0x2039, 0x8b],
-  [0x0152, 0x8c],
-  [0x017d, 0x8e],
-  [0x2018, 0x91],
-  [0x2019, 0x92],
-  [0x201c, 0x93],
-  [0x201d, 0x94],
-  [0x2022, 0x95],
-  [0x2013, 0x96],
-  [0x2014, 0x97],
-  [0x02dc, 0x98],
-  [0x2122, 0x99],
-  [0x0161, 0x9a],
-  [0x203a, 0x9b],
-  [0x0153, 0x9c],
-  [0x017e, 0x9e],
-  [0x0178, 0x9f],
-]);
-
-const decodeLegacyText = (value: string): string => {
-  if (!value.includes("×")) return value;
-  const bytes = Array.from(value, (character) => {
-    const codePoint = character.codePointAt(0) ?? 0;
-    return codePoint <= 0xff ? codePoint : windows1252Bytes.get(codePoint);
-  });
-  if (bytes.some((byte) => byte === undefined)) return value;
-  const decoded = Buffer.from(bytes as number[]).toString("utf8");
-  return decoded.includes("�") ? value : decoded;
-};
-
-type LegacyFeature = {
+type SourceFeature = {
   properties?: Record<string, unknown>;
   geometry?: unknown;
 };
 
-type LegacyFeatureCollection = { features?: LegacyFeature[] };
+type SourceFeatureCollection = { features?: SourceFeature[] };
 
 /**
- * The legacy geometry is a local JS object, not an imported runtime module.
+ * The boundary source is plain GeoJSON carrying the original CBS property names.
  * The transform retains only fields the client needs and is deterministic.
  */
-export const compactLegacyGeometry = (legacySource: string): CompactGeometry => {
-  const expression = legacySource.replace(/^\s*const\s+AREAS_DATA\s*=\s*/, "");
-  const parsed = Function(
-    `"use strict"; return (${expression.replace(/;\s*$/, "")});`,
-  )() as LegacyFeatureCollection;
+export const compactGeometrySource = (geometrySource: string): CompactGeometry => {
+  let parsed: SourceFeatureCollection;
+  try {
+    parsed = JSON.parse(geometrySource) as SourceFeatureCollection;
+  } catch {
+    throw new Error("Boundary source is not valid JSON");
+  }
   if (!Array.isArray(parsed.features)) {
-    throw new Error("Legacy boundary source does not contain a FeatureCollection.features array");
+    throw new Error("Boundary source does not contain a FeatureCollection.features array");
   }
 
   const features = parsed.features
@@ -304,7 +272,7 @@ export const compactLegacyGeometry = (legacySource: string): CompactGeometry => 
       const properties = feature.properties ?? {};
       const localityId = Number(properties.SEMEL_YISHUV);
       if (!Number.isSafeInteger(localityId)) return null;
-      const nameHe = decodeLegacyText(String(properties.SHEM_YISHUV ?? ""));
+      const nameHe = String(properties.SHEM_YISHUV ?? "");
       const rawNameEn = properties.SHEM_YISHUV_ENGLISH;
       return {
         type: "Feature" as const,
@@ -323,9 +291,7 @@ export const compactLegacyGeometry = (legacySource: string): CompactGeometry => 
     .map((feature) => feature.properties.localityId)
     .filter((id, index, ids) => index > 0 && ids[index - 1] === id);
   if (duplicateIds.length > 0) {
-    throw new Error(
-      `Legacy boundary source contains duplicate locality IDs: ${duplicateIds.join(", ")}`,
-    );
+    throw new Error(`Boundary source contains duplicate locality IDs: ${duplicateIds.join(", ")}`);
   }
 
   return { type: "FeatureCollection", features };
@@ -512,14 +478,13 @@ export const importElection = (
 };
 
 export const buildPipeline = (repoRoot: string): PipelineOutput => {
-  const geometryPath = absolutePath(repoRoot, "data/raw/localities.js");
-  const compactGeometry = compactLegacyGeometry(readFileSync(geometryPath, "utf8"));
+  const geometryPath = absolutePath(repoRoot, "data/raw/localities.json");
+  const compactGeometry = compactGeometrySource(readFileSync(geometryPath, "utf8"));
   const geometry = topologyFor(compactGeometry);
   const compactBytes = Buffer.byteLength(JSON.stringify(geometry));
-  const legacyBytes = readFileSync(geometryPath).byteLength;
-  if (compactBytes > legacyBytes) {
+  if (compactBytes > GEOMETRY_BYTE_BUDGET) {
     throw new Error(
-      `Compact geometry is larger than its legacy source (${compactBytes} > ${legacyBytes} bytes)`,
+      `Compact geometry exceeds its budget (${compactBytes} > ${GEOMETRY_BYTE_BUDGET} bytes)`,
     );
   }
   const geometryById = new Map(

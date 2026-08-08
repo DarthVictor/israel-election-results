@@ -5,7 +5,7 @@ import { gzipSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import {
   buildPipeline,
-  compactLegacyGeometry,
+  compactGeometrySource,
   DataValidationError,
   importElection,
   parseCsv,
@@ -143,16 +143,25 @@ describe("importElection", () => {
   });
 });
 
-describe("compactLegacyGeometry", () => {
-  it("keeps only client fields and repairs legacy mojibake names", () => {
-    const geometry = compactLegacyGeometry(`const AREAS_DATA = {
-      type: "FeatureCollection",
-      features: [{
-        type: "Feature",
-        properties: { SEMEL_YISHUV: 7, SHEM_YISHUV: String.fromCodePoint(0xd7, 0xa9, 0xd7, 0x2014, 0xd7, 0xa8), SHEM_YISHUV_ENGLISH: "SHAHAR", unused: true },
-        geometry: { type: "Point", coordinates: [1, 2] }
-      }]
-    };`);
+describe("compactGeometrySource", () => {
+  it("keeps only client fields", () => {
+    const geometry = compactGeometrySource(
+      JSON.stringify({
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: {
+              SEMEL_YISHUV: 7,
+              SHEM_YISHUV: "שחר",
+              SHEM_YISHUV_ENGLISH: "SHAHAR",
+              unused: true,
+            },
+            geometry: { type: "Point", coordinates: [1, 2] },
+          },
+        ],
+      }),
+    );
     expect(geometry).toEqual({
       type: "FeatureCollection",
       features: [
@@ -166,14 +175,28 @@ describe("compactLegacyGeometry", () => {
   });
 
   it("converts geometry to simplified TopoJSON while preserving locality IDs and names", () => {
-    const featureCollection = compactLegacyGeometry(`const AREAS_DATA = {
-      type: "FeatureCollection",
-      features: [{
-        type: "Feature",
-        properties: { SEMEL_YISHUV: 7, SHEM_YISHUV: "שחר", SHEM_YISHUV_ENGLISH: "SHAHAR" },
-        geometry: { type: "Polygon", coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]] }
-      }]
-    };`);
+    const featureCollection = compactGeometrySource(
+      JSON.stringify({
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: { SEMEL_YISHUV: 7, SHEM_YISHUV: "שחר", SHEM_YISHUV_ENGLISH: "SHAHAR" },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [1, 0],
+                  [1, 1],
+                  [0, 0],
+                ],
+              ],
+            },
+          },
+        ],
+      }),
+    );
     const topology = topologyFor(featureCollection);
     expect(topology.type).toBe("Topology");
     expect(topology.objects.localities.type).toBe("GeometryCollection");
@@ -206,7 +229,7 @@ describe("buildPipeline", () => {
     ).toBe(true);
     expect(gzipSync(JSON.stringify(output.geometry)).byteLength).toBeLessThan(1.5 * 1024 * 1024);
     expect(Buffer.byteLength(JSON.stringify(output.geometry))).toBeLessThan(
-      readFileSync(resolve(repoRoot, "data/raw/localities.js")).byteLength,
+      readFileSync(resolve(repoRoot, "data/raw/localities.json")).byteLength,
     );
   });
 });

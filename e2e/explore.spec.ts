@@ -33,7 +33,7 @@ test("search selection updates the shareable URL", async ({ page }) => {
   await expect(page).toHaveURL(new RegExp(`locality=${LOCALITY_ID}`));
 });
 
-test("shows source attribution and portfolio project documentation", async ({ page }) => {
+test("shows source attribution", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("contentinfo")).toContainText("Central Elections Committee");
@@ -44,10 +44,6 @@ test("shows source attribution and portfolio project documentation", async ({ pa
   await expect(page.getByRole("link", { name: "Download locality CSV" })).toHaveAttribute(
     "href",
     "https://media25.bechirot.gov.il/files/expc.csv",
-  );
-  await expect(page.getByRole("link", { name: /Project source/i })).toHaveAttribute(
-    "href",
-    "https://github.com/DarthVictor/israel-election-results",
   );
 });
 

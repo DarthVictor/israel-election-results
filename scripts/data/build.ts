@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildPipeline } from "./pipeline.ts";
@@ -38,9 +38,27 @@ if (validateOnly) {
       dataUrl: `/data/generated/${resultsByElection.get(election.id)}`,
     })),
   };
+  const unmatchedFilename = contentName("unmatched-localities", output.unmatchedReport);
+
+  // Content-addressed names change whenever the data does. Without this sweep the
+  // superseded files stay behind, get committed, and are copied into dist/ by
+  // Vite's public directory — shipping payload nothing references.
+  const written = new Set([
+    "manifest.json",
+    geometryFilename,
+    unmatchedFilename,
+    ...resultsByElection.values(),
+  ]);
+  const generatedName = /^(localities|election-\d+|unmatched-localities)\.[0-9a-f]{12}\.json$/;
+  for (const entry of readdirSync(outputDirectory)) {
+    if (!written.has(entry) && generatedName.test(entry)) {
+      rmSync(resolve(outputDirectory, entry));
+    }
+  }
+
   writeJson("manifest.json", manifest);
   writeJson(geometryFilename, output.geometry);
-  writeJson(contentName("unmatched-localities", output.unmatchedReport), output.unmatchedReport);
+  writeJson(unmatchedFilename, output.unmatchedReport);
   for (const result of output.results) {
     writeJson(resultsByElection.get(result.electionId)!, result);
   }
