@@ -38,17 +38,22 @@ export type ElectionManifest = {
   geometryUrl: string;
 };
 
-export type LocalityResult = VoteTotals & {
+/** Identity of one locality, shared by the generated map geometry and result rows. */
+export type LocalityProperties = {
   localityId: number;
   nameHe: string;
   nameEn: string | null;
-  partyVotes: Record<string, number>;
-  /** One-based rank by list vote share among mappable localities. */
-  partyRanks: Record<string, number>;
-  /** Distinguishes mapped localities from geometry gaps and national-only records. */
-  geography: "mappable" | "unmatchedBoundary" | "nonGeographic";
-  hasGeometry: boolean;
 };
+
+export type LocalityResult = VoteTotals &
+  LocalityProperties & {
+    partyVotes: Record<string, number>;
+    /** One-based rank by list vote share among mappable localities. */
+    partyRanks: Record<string, number>;
+    /** Distinguishes mapped localities from geometry gaps and national-only records. */
+    geography: "mappable" | "unmatchedBoundary" | "nonGeographic";
+    hasGeometry: boolean;
+  };
 
 /** One independently cacheable static data file for an election. */
 export type ElectionResultsFile = {

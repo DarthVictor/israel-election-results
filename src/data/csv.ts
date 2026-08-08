@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { MANIFEST_SCHEMA_VERSION } from "../domain/contracts.ts";
+import { MANIFEST_SCHEMA_VERSION, type LocalityResult } from "../domain/contracts.ts";
+import { assert } from "./assert.ts";
 import type { ElectionSource } from "./sources.ts";
 
 /** Official exports differ in header spelling; election 21 omits the committee column. */
@@ -12,13 +13,9 @@ const COLUMN = {
   valid: ["כשרים"],
 };
 
-const check = (ok: unknown, message: string) => {
-  if (!ok) throw new Error(message);
-};
-
 const count = (text = "", where: string) => {
   const value = Number(text.trim());
-  check(
+  assert(
     /^(0|[1-9]\d*)$/.test(text.trim()) && Number.isSafeInteger(value),
     `${where}: expected a non-negative integer, received ${JSON.stringify(text)}`,
   );
@@ -50,12 +47,12 @@ export const readElection = async (
   englishNames: ReadonlyMap<number, string | null>,
 ) => {
   const [header, ...rows] = await readCsv(path);
-  check(rows.length > 0, `election ${source.id}: no data rows`);
+  assert(rows.length > 0, `election ${source.id}: no data rows`);
 
   const headers = header.map((name) => name.trim());
   const indexOf = (aliases: string[]) => {
     const index = headers.findIndex((name) => aliases.includes(name));
-    check(index >= 0, `election ${source.id}: missing official column ${aliases.join(" / ")}`);
+    assert(index >= 0, `election ${source.id}: missing official column ${aliases.join(" / ")}`);
     return index;
   };
   const at = {
@@ -74,19 +71,19 @@ export const readElection = async (
   const declared = source.parties.map((party) => party.id);
   const codes = parties.map((party) => party.code);
   for (const code of codes) {
-    check(declared.includes(code), `election ${source.id}: unverified party list column ${code}`);
-    check(
+    assert(declared.includes(code), `election ${source.id}: unverified party list column ${code}`);
+    assert(
       codes.indexOf(code) === codes.lastIndexOf(code),
       `election ${source.id}: duplicate party list column ${code}`,
     );
   }
   for (const code of declared) {
-    check(codes.includes(code), `election ${source.id}: verified party list ${code} is absent`);
+    assert(codes.includes(code), `election ${source.id}: verified party list ${code} is absent`);
   }
 
-  const localities = rows.map((row, rowIndex) => {
+  const localities = rows.map((row, rowIndex): LocalityResult => {
     const where = `election ${source.id} line ${rowIndex + 2}`;
-    check(
+    assert(
       row.length === headers.length,
       `${where}: expected ${headers.length} fields, received ${row.length}`,
     );
@@ -99,11 +96,11 @@ export const readElection = async (
       parties.map(({ code, index }) => [code, count(row[index], `${where} (${code})`)]),
     );
     const partyTotal = Object.values(partyVotes).reduce((sum, votes) => sum + votes, 0);
-    check(
+    assert(
       voters === valid + invalid,
       `${where}: voters ${voters} ≠ valid ${valid} + invalid ${invalid}`,
     );
-    check(partyTotal === valid, `${where}: party votes ${partyTotal} ≠ valid ballots ${valid}`);
+    assert(partyTotal === valid, `${where}: party votes ${partyTotal} ≠ valid ballots ${valid}`);
 
     // National-only records (external envelopes) are kept for totals but never mapped.
     const geography =
@@ -121,7 +118,7 @@ export const readElection = async (
       valid,
       invalid,
       partyVotes,
-      partyRanks: {} as Record<string, number>,
+      partyRanks: {},
       geography,
       hasGeometry: geography === "mappable",
     };
@@ -129,7 +126,7 @@ export const readElection = async (
 
   const ids = localities.map((locality) => locality.localityId);
   const duplicate = ids.find((id, index) => ids.indexOf(id) !== index);
-  check(duplicate === undefined, `election ${source.id}: duplicate locality ID ${duplicate}`);
+  assert(duplicate === undefined, `election ${source.id}: duplicate locality ID ${duplicate}`);
 
   for (const code of declared) {
     localities
@@ -145,7 +142,7 @@ export const readElection = async (
       });
   }
 
-  const idsWhere = (geography: string) =>
+  const idsWhere = (geography: LocalityResult["geography"]) =>
     localities
       .filter((row) => row.geography === geography)
       .map((row) => row.localityId)

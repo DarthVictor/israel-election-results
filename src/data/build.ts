@@ -59,19 +59,18 @@ const write = async () => {
   const output = await build();
   const geometryFile = hashedName("localities", output.geometry);
   const unmatchedFile = hashedName("unmatched-localities", output.unmatchedReport);
-  const electionFiles = new Map(
-    output.results.map((result) => [
-      result.electionId,
-      hashedName(`election-${result.electionId}`, result),
-    ]),
+  // Results and manifest entries are both built from ELECTION_SOURCES, so they share
+  // an index; pairing by position avoids a lookup that could not fail anyway.
+  const electionFiles = output.results.map((result) =>
+    hashedName(`election-${result.electionId}`, result),
   );
   const manifest = {
     schemaVersion: MANIFEST_SCHEMA_VERSION,
     geometryUrl: `/data/generated/${geometryFile}`,
     // dataUrl sits between the source links and the party list, as the client contract declares.
-    elections: output.elections.map(({ parties, nationalTotals, ...election }) => ({
+    elections: output.elections.map(({ parties, nationalTotals, ...election }, index) => ({
       ...election,
-      dataUrl: `/data/generated/${electionFiles.get(election.id)}`,
+      dataUrl: `/data/generated/${electionFiles[index]}`,
       parties,
       nationalTotals,
     })),
@@ -80,7 +79,7 @@ const write = async () => {
   await mkdir(outputDir, { recursive: true });
   // Hashed names change with the data. Without this sweep the superseded files stay
   // behind, get committed, and are copied into dist/ — payload nothing references.
-  const keep = new Set(["manifest.json", geometryFile, unmatchedFile, ...electionFiles.values()]);
+  const keep = new Set(["manifest.json", geometryFile, unmatchedFile, ...electionFiles]);
   for (const name of await readdir(outputDir)) {
     if (!keep.has(name) && generatedName.test(name)) await rm(resolve(outputDir, name));
   }
@@ -89,10 +88,7 @@ const write = async () => {
     ["manifest.json", manifest],
     [geometryFile, output.geometry],
     [unmatchedFile, output.unmatchedReport],
-    ...output.results.map((result): [string, unknown] => [
-      electionFiles.get(result.electionId)!,
-      result,
-    ]),
+    ...output.results.map((result, index): [string, unknown] => [electionFiles[index], result]),
   ];
   await Promise.all(
     files.map(([name, value]) => writeFile(resolve(outputDir, name), json(value), "utf8")),

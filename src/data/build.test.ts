@@ -20,9 +20,9 @@ const fixture: ElectionSource = {
   ],
 };
 
-const csvFile = async (contents: string) => {
+const fixtureFile = async (contents: string, name = "fixture.csv") => {
   const directory = await mkdtemp(resolve(tmpdir(), "election-fixture-"));
-  const path = resolve(directory, "fixture.csv");
+  const path = resolve(directory, name);
   await writeFile(path, contents, "utf8");
   return path;
 };
@@ -32,7 +32,7 @@ const names = (...ids: number[]) => new Map(ids.map((id) => [id, null]));
 
 describe("readCsv", () => {
   it("strips a BOM, handles CRLF, and keeps Hebrew abbreviation quotes literal", async () => {
-    const path = await csvFile('\uFEFFשם,ערך\r\nניר ח"ן,2\r\n\r\n');
+    const path = await fixtureFile('\uFEFFשם,ערך\r\nניר ח"ן,2\r\n\r\n');
     expect(await readCsv(path)).toEqual([
       ["שם", "ערך"],
       ['ניר ח"ן', "2"],
@@ -42,7 +42,7 @@ describe("readCsv", () => {
 
 describe("readElection", () => {
   it("normalizes a row and ranks mapped localities by vote share", async () => {
-    const path = await csvFile(
+    const path = await fixtureFile(
       [
         HEADER,
         "גדול,1,1000,1000,0,1000,600,400",
@@ -67,35 +67,35 @@ describe("readElection", () => {
   });
 
   it("rejects unverified party columns", async () => {
-    const path = await csvFile(
+    const path = await fixtureFile(
       `שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,א,ג\nאבג,1,10,8,1,7,4,3\n`,
     );
     await expect(readElection(fixture, path, names(1))).rejects.toThrow("unverified party list");
   });
 
   it("rejects vote totals that do not reconcile", async () => {
-    const path = await csvFile(`${HEADER}\nאבג,1,10,8,1,7,4,1\n`);
+    const path = await fixtureFile(`${HEADER}\nאבג,1,10,8,1,7,4,1\n`);
     await expect(readElection(fixture, path, names(1))).rejects.toThrow("party votes");
   });
 
   it("rejects duplicate locality IDs and malformed counts", async () => {
-    const duplicate = await csvFile(`${HEADER}\nאבג,1,10,8,1,7,4,3\nדהו,1,10,8,1,7,4,3\n`);
+    const duplicate = await fixtureFile(`${HEADER}\nאבג,1,10,8,1,7,4,3\nדהו,1,10,8,1,7,4,3\n`);
     await expect(readElection(fixture, duplicate, names(1))).rejects.toThrow(
       "duplicate locality ID",
     );
-    const negative = await csvFile(`${HEADER}\nאבג,1,-1,8,1,7,4,3\n`);
+    const negative = await fixtureFile(`${HEADER}\nאבג,1,-1,8,1,7,4,3\n`);
     await expect(readElection(fixture, negative, names(1))).rejects.toThrow("non-negative integer");
   });
 
   it("rejects rows whose field count does not match the header", async () => {
-    const path = await csvFile(`${HEADER}\nאבג,1,10,8,1,7,4\n`);
+    const path = await fixtureFile(`${HEADER}\nאבג,1,10,8,1,7,4\n`);
     await expect(readElection(fixture, path, names(1))).rejects.toThrow("expected 8 fields");
   });
 });
 
 describe("readLocalities", () => {
   it("keeps only client fields, sorts by locality ID, and builds simplified TopoJSON", async () => {
-    const path = await csvFile(
+    const path = await fixtureFile(
       JSON.stringify({
         type: "FeatureCollection",
         features: [
@@ -134,6 +134,7 @@ describe("readLocalities", () => {
           },
         ],
       }),
+      "localities.json",
     );
     const localities = await readLocalities(path);
     expect(localities.features.map((feature) => feature.properties)).toEqual([

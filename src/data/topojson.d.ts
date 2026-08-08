@@ -1,8 +1,7 @@
 /** Minimal declarations for the two untyped build-time TopoJSON packages. */
 declare module "topojson-server" {
   import type { GeometryCollection, Topology } from "topojson-specification";
-
-  type LocalityProperties = { localityId: number; nameHe: string; nameEn: string | null };
+  import type { LocalityProperties } from "../domain/contracts.ts";
 
   export function topology(
     objects: Record<string, unknown>,

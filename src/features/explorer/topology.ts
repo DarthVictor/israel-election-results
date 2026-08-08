@@ -1,3 +1,5 @@
+import type { LocalityProperties } from "../../domain/contracts";
+
 type Position = [number, number];
 type Arc = Position[];
 
@@ -15,7 +17,7 @@ type Topology = {
 
 export type ExplorerFeature = {
   type: "Feature";
-  properties: { localityId: number; nameHe: string; nameEn: string | null };
+  properties: LocalityProperties;
   geometry: { type: "Polygon" | "MultiPolygon"; coordinates: Position[][] | Position[][][] };
 };
 

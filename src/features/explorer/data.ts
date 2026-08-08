@@ -1,3 +1,4 @@
+import { MANIFEST_SCHEMA_VERSION } from "../../domain/contracts";
 import type { ElectionManifest, ElectionResultsFile } from "../../domain/contracts";
 
 async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
@@ -40,7 +41,7 @@ async function awaitWithSignal<T>(promise: Promise<T>, signal?: AbortSignal): Pr
 
 export async function loadManifest(signal?: AbortSignal): Promise<ElectionManifest> {
   const manifest = await getJson<ElectionManifest>("/data/generated/manifest.json", signal);
-  if (manifest.schemaVersion !== 1 || manifest.elections.length === 0)
+  if (manifest.schemaVersion !== MANIFEST_SCHEMA_VERSION || manifest.elections.length === 0)
     throw new Error("The election manifest is invalid.");
   return manifest;
 }
@@ -56,7 +57,7 @@ export async function loadElection(
   if (!pending) {
     pending = getJson<ElectionResultsFile>(url)
       .then((data) => {
-        if (data.schemaVersion !== 1 || !Array.isArray(data.localities)) {
+        if (data.schemaVersion !== MANIFEST_SCHEMA_VERSION || !Array.isArray(data.localities)) {
           throw new Error("The election result file is invalid.");
         }
         successfulElectionLoads.set(url, data);
