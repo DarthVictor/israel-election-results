@@ -1,5 +1,5 @@
 /** Versioned contract for generated, static election data. */
-export const MANIFEST_SCHEMA_VERSION = 1 as const;
+export const MANIFEST_SCHEMA_VERSION = 2 as const;
 
 export type ElectionId = number;
 
@@ -17,6 +17,8 @@ export type PartyList = {
   id: string;
   nameHe: string;
   nameEn: string | null;
+  /** Wikipedia-sourced, unlike nameHe and the curated nameEn values. */
+  nameRu: string | null;
 };
 
 export type ElectionMetadata = {

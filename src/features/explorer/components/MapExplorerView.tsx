@@ -1,12 +1,14 @@
 import { Show } from "solid-js";
+import { useI18n } from "../../../i18n/context";
 import { LeafletMap } from "../LeafletMap";
 import type { createMapView } from "../views/create-map-view";
 import { MapLegend } from "./MapLegend";
 import { ErrorPanel } from "./StatusPanels";
 
 export function MapExplorerView(props: { map: ReturnType<typeof createMapView> }) {
+  const { t } = useI18n();
   return (
-    <section class="map-region" aria-label="Election result map" data-testid="map-region">
+    <section class="map-region" aria-label={t("map.region")} data-testid="map-region">
       <Show when={props.map.geometryError()}>
         <div class="map-error">
           <ErrorPanel compact error={props.map.geometryError()} onRetry={props.map.onRetryLoad} />

@@ -5,6 +5,8 @@ import { ExportActions } from "./components/ExportActions";
 import { LocalityTable } from "./components/LocalityTable";
 import { MapExplorerView } from "./components/MapExplorerView";
 import { ErrorPanel, LoadingScreen, ResultsStatus } from "./components/StatusPanels";
+import { LocaleSwitcher } from "./components/LocaleSwitcher";
+import { useI18n } from "../../i18n/context";
 import type { ExplorerFeature } from "./feature/explorer-feature.types";
 
 export type ExplorerPageEnvironment = {
@@ -16,6 +18,7 @@ export function ExplorerPage(props: {
   explorer: ExplorerFeature;
   environment: ExplorerPageEnvironment;
 }) {
+  const { t } = useI18n();
   const [isMobile, setIsMobile] = createSignal(false);
   const [isSheetOpen, setIsSheetOpen] = createSignal(false);
   const selectExploreLocality = (localityId: number) => {
@@ -36,39 +39,42 @@ export function ExplorerPage(props: {
   return (
     <div class="app-shell">
       <a class="skip-link" href="#explorer-content">
-        Skip to election explorer
+        {t("app.skipLink")}
       </a>
       <header class="site-header">
         <div>
-          <p class="eyebrow">Locality-level Knesset results · 2019–2022</p>
-          <h1>Israel Election Results Explorer</h1>
+          <p class="eyebrow">{t("app.eyebrow")}</p>
+          <h1>{t("app.title")}</h1>
         </div>
-        <div class="source-links" aria-label="Official data sources">
-          <a
-            href={
-              props.explorer.selection.election()?.sourceUrl ?? "https://votes25.bechirot.gov.il/"
-            }
-            target="_blank"
-            rel="noreferrer"
-          >
-            Official results
-          </a>
-          <a
-            href={
-              props.explorer.selection.election()?.sourceCsvUrl ??
-              "https://media25.bechirot.gov.il/files/expc.csv"
-            }
-            target="_blank"
-            rel="noreferrer"
-          >
-            Download locality CSV
-          </a>
+        <div class="header-tools">
+          <LocaleSwitcher />
+          <div class="source-links" aria-label={t("header.sources")}>
+            <a
+              href={
+                props.explorer.selection.election()?.sourceUrl ?? "https://votes25.bechirot.gov.il/"
+              }
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("header.officialResults")}
+            </a>
+            <a
+              href={
+                props.explorer.selection.election()?.sourceCsvUrl ??
+                "https://media25.bechirot.gov.il/files/expc.csv"
+              }
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("header.downloadCsv")}
+            </a>
+          </div>
         </div>
       </header>
       <main id="explorer-content" tabindex={-1}>
         <Show
           when={!props.explorer.loading.loadingManifest()}
-          fallback={<LoadingScreen label="Preparing election data" />}
+          fallback={<LoadingScreen label={t("app.preparing")} />}
         >
           <Show
             when={!props.explorer.loading.manifestError()}
@@ -83,7 +89,7 @@ export function ExplorerPage(props: {
               <aside
                 class="analysis-panel"
                 classList={{ "is-sheet-open": isSheetOpen() }}
-                aria-label="Election controls and locality analysis"
+                aria-label={t("panel.controls")}
                 data-testid="analysis-panel"
               >
                 <button
@@ -96,10 +102,12 @@ export function ExplorerPage(props: {
                 >
                   <span>
                     {props.explorer.selection.state().mode === "table"
-                      ? "Locality table"
-                      : "Explore results"}
+                      ? t("panel.table")
+                      : t("panel.explore")}
                   </span>
-                  <span aria-hidden="true">{isSheetOpen() ? "Hide" : "Show"}</span>
+                  <span aria-hidden="true">
+                    {isSheetOpen() ? t("panel.hide") : t("panel.show")}
+                  </span>
                 </button>
                 <div
                   id="analysis-sheet-content"
@@ -180,13 +188,13 @@ export function ExplorerPage(props: {
       </main>
       <footer class="site-footer" role="contentinfo">
         <span>
-          Final results:{" "}
+          {t("footer.finalResults")}{" "}
           <a
             href={
               props.explorer.selection.election()?.sourceUrl ?? "https://votes25.bechirot.gov.il/"
             }
           >
-            Central Elections Committee
+            {t("footer.committee")}
           </a>{" "}
           ·{" "}
           <a
@@ -195,11 +203,11 @@ export function ExplorerPage(props: {
               "https://media25.bechirot.gov.il/files/expc.csv"
             }
           >
-            Locality CSV
+            {t("footer.localityCsv")}
           </a>
         </span>
         <span>
-          Map: <a href="https://leafletjs.com/">Leaflet</a> and{" "}
+          {t("footer.map")} <a href="https://leafletjs.com/">Leaflet</a> {t("footer.and")}{" "}
           <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
         </span>
       </footer>

@@ -5,10 +5,12 @@ import type {
   LocalityResult,
   PartyList,
 } from "../../../domain/contracts";
+import type { Translate } from "../../../i18n/translate";
 import type { ExplorerFeature } from "../topology";
 
 /** Component-ready map data, presentation state, and map-specific callbacks. */
 export function createMapView(dependencies: {
+  t: Translate;
   state: Accessor<AnalysisState>;
   geometry: Accessor<ExplorerFeature[]>;
   geometryError: Accessor<unknown>;
@@ -32,15 +34,15 @@ export function createMapView(dependencies: {
   );
   const unavailableMessage = createMemo(() => {
     if (dependencies.state().mode === "compare" && dependencies.comparisonError()) {
-      return "Comparison results are unavailable. Try again to restore the comparison map.";
+      return dependencies.t("map.comparisonError");
     }
     if (dependencies.state().mode === "compare" && dependencies.loadingComparison()) {
-      return "Loading comparison results…";
+      return dependencies.t("map.comparisonLoading");
     }
     if (dependencies.resultsError()) {
-      return "Selected election results are unavailable. Try again to restore the map.";
+      return dependencies.t("map.resultsError");
     }
-    return "Loading map boundaries…";
+    return dependencies.t("map.boundariesLoading");
   });
 
   return {

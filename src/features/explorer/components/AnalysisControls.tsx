@@ -6,14 +6,11 @@ import type {
   ElectionMetadata,
   PartyList,
 } from "../../../domain/contracts";
-import { displayParty } from "../analysis";
+import { useI18n } from "../../../i18n/context";
 import { ErrorPanel } from "./StatusPanels";
 
-const modes: { id: AnalysisMode; label: string }[] = [
-  { id: "explore", label: "Explore" },
-  { id: "compare", label: "Compare" },
-  { id: "table", label: "Table" },
-];
+/** Ballot-order tabs. Labels are read per render so a locale switch re-translates them. */
+const MODES: AnalysisMode[] = ["explore", "compare", "table"];
 
 export function AnalysisControls(props: {
   state: AnalysisState;
@@ -30,26 +27,31 @@ export function AnalysisControls(props: {
   onComparisonElection(electionId: number): void;
   onComparisonParty(partyId: string): void;
 }) {
+  const { t, plural, partyName, shortPartyName, formatDate } = useI18n();
+  // The manifest label is a fixed English string, so the Knesset number drives the text
+  // instead — ordinal plural rules give 21st/22nd/23rd where English needs them.
+  const electionLabel = (id: number) => plural("controls.knesset", id, "ordinal");
+
   return (
     <>
-      <nav class="mode-tabs" aria-label="Analysis view">
-        <For each={modes}>
-          {(item) => (
+      <nav class="mode-tabs" aria-label={t("modes.label")}>
+        <For each={MODES}>
+          {(mode) => (
             <button
               type="button"
-              classList={{ active: props.state.mode === item.id }}
-              aria-current={props.state.mode === item.id ? "page" : undefined}
-              onClick={() => props.onMode(item.id)}
-              data-testid={`mode-${item.id}`}
+              classList={{ active: props.state.mode === mode }}
+              aria-current={props.state.mode === mode ? "page" : undefined}
+              onClick={() => props.onMode(mode)}
+              data-testid={`mode-${mode}`}
             >
-              {item.label}
+              {t(`modes.${mode}`)}
             </button>
           )}
         </For>
       </nav>
       <div class="control-stack">
         <label>
-          Election
+          {t("controls.election")}
           <select
             data-testid="election-select"
             value={props.state.election}
@@ -58,61 +60,70 @@ export function AnalysisControls(props: {
             <For each={props.manifest?.elections}>
               {(item) => (
                 <option value={item.id}>
-                  {item.label} · {item.date}
+                  {electionLabel(item.id)} · {formatDate(item.date)}
                 </option>
               )}
             </For>
           </select>
         </label>
         <label>
-          Party
+          {t("controls.party")}
           <select
             data-testid="party-select"
             value={props.state.party}
             onInput={(event) => props.onParty(event.currentTarget.value)}
           >
-            <option value="">Choose a party</option>
+            <option value="">{t("controls.chooseParty")}</option>
             <For each={props.election?.parties}>
-              {(item) => <option value={item.id}>{displayParty(item)}</option>}
+              {(item) => (
+                // Only the reader's own language here: the ballot names run to sixty
+                // characters, and a native select cannot lay out the pairing legibly. The
+                // official name stays one hover away, and in full everywhere else.
+                <option value={item.id} title={partyName(item)}>
+                  {shortPartyName(item)}
+                </option>
+              )}
             </For>
           </select>
         </label>
       </div>
       <Show when={props.state.mode === "compare"}>
         <section class="comparison-controls" data-testid="comparison-controls">
-          <p class="mode-label">Independent comparison</p>
-          <p class="comparison-note">
-            A and B are separate historical lists. This comparison does not claim party continuity.
-          </p>
+          <p class="mode-label">{t("controls.comparisonTitle")}</p>
+          <p class="comparison-note">{t("controls.comparisonNote")}</p>
           <div class="control-stack">
             <label>
-              Election B
+              {t("controls.electionB")}
               <select
                 data-testid="compare-election-select"
                 value={props.compareElection?.id}
                 onInput={(event) => props.onComparisonElection(Number(event.currentTarget.value))}
               >
                 <For each={props.manifest?.elections}>
-                  {(item) => <option value={item.id}>{item.label}</option>}
+                  {(item) => <option value={item.id}>{electionLabel(item.id)}</option>}
                 </For>
               </select>
             </label>
             <label>
-              List B
+              {t("controls.listB")}
               <select
                 data-testid="compare-party-select"
                 value={props.compareParty?.id}
                 onInput={(event) => props.onComparisonParty(event.currentTarget.value)}
               >
                 <For each={props.compareElection?.parties}>
-                  {(item) => <option value={item.id}>{displayParty(item)}</option>}
+                  {(item) => (
+                    <option value={item.id} title={partyName(item)}>
+                      {shortPartyName(item)}
+                    </option>
+                  )}
                 </For>
               </select>
             </label>
           </div>
           <Show when={props.loadingComparison}>
             <p class="status-message" role="status">
-              Loading comparison data…
+              {t("controls.loadingComparison")}
             </p>
           </Show>
           <Show when={props.comparisonError}>

@@ -1,16 +1,10 @@
 import { For, Show } from "solid-js";
 import type { LocalityResult, PartyList } from "../../../domain/contracts";
-import { displayLocality, strongestLocality } from "../analysis";
+import { useI18n } from "../../../i18n/context";
+import { strongestLocality } from "../analysis";
 import { ComparisonDetails } from "./ComparisonDetails";
 import { InsightCard } from "./InsightCard";
 import { LocalityDetails } from "./LocalityDetails";
-
-const percent = new Intl.NumberFormat("en", {
-  style: "percent",
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
-const number = new Intl.NumberFormat("en");
 
 export function ExplorePanel(props: {
   party?: PartyList;
@@ -27,6 +21,7 @@ export function ExplorePanel(props: {
   compareParty?: PartyList;
   compareMode: boolean;
 }) {
+  const { t, partyName, localityName, formatters } = useI18n();
   return (
     <>
       <Show
@@ -34,40 +29,43 @@ export function ExplorePanel(props: {
         fallback={
           <section class="insight-section">
             <div class="empty-party-state" data-testid="no-party-selected">
-              <h2>Choose a party</h2>
-              <p>Select a party to color the map and see its results across localities.</p>
+              <h2>{t("explore.chooseParty")}</h2>
+              <p>{t("explore.choosePartyHint")}</p>
             </div>
           </section>
         }
       >
         <section class="insight-section">
-          <h2>{props.party?.nameEn ?? props.party?.nameHe}</h2>
+          <h2>{partyName(props.party)}</h2>
           <div class="insight-grid">
-            <InsightCard label="National share" value={percent.format(props.nationalShare)} />
             <InsightCard
-              label="Strongest locality"
+              label={t("explore.nationalShare")}
+              value={formatters().percent.format(props.nationalShare)}
+            />
+            <InsightCard
+              label={t("explore.strongestLocality")}
               value={
-                props.rows.length
-                  ? displayLocality(strongestLocality(props.rows, props.partyId))
-                  : "—"
+                props.rows.length ? localityName(strongestLocality(props.rows, props.partyId)) : "—"
               }
             />
             <InsightCard
-              label="Mapped localities"
-              value={number.format(props.rows.filter((row) => row.geography === "mappable").length)}
+              label={t("explore.mappedLocalities")}
+              value={formatters().number.format(
+                props.rows.filter((row) => row.geography === "mappable").length,
+              )}
             />
           </div>
         </section>
       </Show>
       <section class="search-section">
-        <label for="locality-search">Find a locality</label>
+        <label for="locality-search">{t("explore.findLocality")}</label>
         <input
           id="locality-search"
           name="locality-search"
           data-testid="locality-search"
           value={props.search}
           onInput={(event) => props.setSearch(event.currentTarget.value)}
-          placeholder="Search in Hebrew or English"
+          placeholder={t("explore.searchPlaceholder")}
           autocomplete="off"
         />
         <Show when={props.matches.length > 0}>
@@ -80,7 +78,7 @@ export function ExplorePanel(props: {
                     data-testid={`locality-match-${item.localityId}`}
                     onClick={() => props.onSelect(item.localityId)}
                   >
-                    {displayLocality(item)}
+                    {localityName(item)}
                   </button>
                 </li>
               )}
@@ -92,8 +90,8 @@ export function ExplorePanel(props: {
         when={props.selected ?? props.selectedComparison}
         fallback={
           <section class="locality-panel empty-selection">
-            <h2>Select a locality</h2>
-            <p>Choose an area on the map or search by name.</p>
+            <h2>{t("explore.selectLocality")}</h2>
+            <p>{t("explore.selectLocalityHint")}</p>
           </section>
         }
       >

@@ -4,7 +4,7 @@ import type { ElectionManifest } from "../../../domain/contracts";
 import { createAnalysisSelection, type AnalysisSelection } from "./create-analysis-selection";
 
 const manifest: ElectionManifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   geometryUrl: "/geometry",
   elections: [
     {
@@ -14,7 +14,7 @@ const manifest: ElectionManifest = {
       sourceUrl: "https://example.test/24",
       sourceCsvUrl: "https://example.test/24.csv",
       dataUrl: "/24",
-      parties: [{ id: "YESH", nameHe: "יש", nameEn: "Yesh" }],
+      parties: [{ id: "YESH", nameHe: "יש", nameEn: "Yesh", nameRu: null }],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },
     {
@@ -24,7 +24,7 @@ const manifest: ElectionManifest = {
       sourceUrl: "https://example.test/25",
       sourceCsvUrl: "https://example.test/25.csv",
       dataUrl: "/25",
-      parties: [{ id: "LIKUD", nameHe: "מחל", nameEn: "Likud" }],
+      parties: [{ id: "LIKUD", nameHe: "מחל", nameEn: "Likud", nameRu: null }],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },
   ],

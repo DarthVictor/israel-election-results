@@ -1,9 +1,25 @@
 import { MANIFEST_SCHEMA_VERSION } from "../../domain/contracts";
 import type { ElectionManifest, ElectionResultsFile } from "../../domain/contracts";
+import type { TemplateArgs, TranslationKey } from "../../i18n/translate";
+
+/**
+ * This module has no locale of its own: it runs before any component and is shared by every
+ * language. Carrying the dictionary key instead of a sentence lets the panel that finally
+ * shows the failure render it in whichever language the reader has chosen.
+ */
+export class DataError extends Error {
+  constructor(
+    readonly key: TranslationKey,
+    readonly args?: TemplateArgs,
+  ) {
+    super(key);
+    this.name = "DataError";
+  }
+}
 
 async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(url, { signal });
-  if (!response.ok) throw new Error(`Could not load data (${response.status}).`);
+  if (!response.ok) throw new DataError("dataError.http", { status: response.status });
   return (await response.json()) as T;
 }
 
@@ -42,7 +58,7 @@ async function awaitWithSignal<T>(promise: Promise<T>, signal?: AbortSignal): Pr
 export async function loadManifest(signal?: AbortSignal): Promise<ElectionManifest> {
   const manifest = await getJson<ElectionManifest>("/data/generated/manifest.json", signal);
   if (manifest.schemaVersion !== MANIFEST_SCHEMA_VERSION || manifest.elections.length === 0)
-    throw new Error("The election manifest is invalid.");
+    throw new DataError("dataError.manifestInvalid");
   return manifest;
 }
 
@@ -58,7 +74,7 @@ export async function loadElection(
     pending = getJson<ElectionResultsFile>(url)
       .then((data) => {
         if (data.schemaVersion !== MANIFEST_SCHEMA_VERSION || !Array.isArray(data.localities)) {
-          throw new Error("The election result file is invalid.");
+          throw new DataError("dataError.resultsInvalid");
         }
         successfulElectionLoads.set(url, data);
         return data;

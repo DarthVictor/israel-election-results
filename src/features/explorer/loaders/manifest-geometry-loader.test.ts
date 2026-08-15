@@ -5,12 +5,12 @@ import type { ExplorerFeature } from "../topology";
 import { createManifestGeometryLoader } from "./manifest-geometry-loader";
 
 const firstManifest: ElectionManifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   geometryUrl: "/first.topo.json",
   elections: [],
 };
 const secondManifest: ElectionManifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   geometryUrl: "/second.topo.json",
   elections: [],
 };

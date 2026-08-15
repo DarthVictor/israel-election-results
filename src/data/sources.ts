@@ -1,6 +1,7 @@
 import type { ElectionId, PartyList } from "../domain/contracts.ts";
 
-type PartyMetadata = PartyList;
+/** Curated, officially verified metadata. Russian names are merged in from Wikipedia at build time. */
+type PartyMetadata = Omit<PartyList, "nameRu">;
 
 export type ElectionSource = {
   id: ElectionId;

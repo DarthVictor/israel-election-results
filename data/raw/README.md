@@ -32,3 +32,28 @@ removed; unlike the election CSVs it is not a byte-preserved original.
 All election list names and ballot codes are verified against each election's
 official Central Elections Committee national-results page in
 `src/data/sources.ts`.
+
+## List name translations
+
+`party-wikipedia.json` and `party-names.json` are **not** Central Elections Committee
+sources and carry none of the verification the files above do.
+
+`party-wikipedia.json` is hand-curated: one Hebrew Wikipedia article title, or `null`,
+for every list in every election. It is keyed by election and ballot code together,
+because codes are reused between elections by unrelated lists — `פה` is Blue and White
+in elections 21–23 and Yesh Atid in 24–25 — and a translation must never imply that two
+differently named lists are the same political entity. For the same reason elections
+21–23 point at the Blue and White _alliance_ article while election 24 points at the
+_party_ article.
+
+`party-names.json` is generated from those titles by `pnpm data:translations`, which
+reads the English and Russian interlanguage links of each article. It is committed so
+that `pnpm data:build` stays offline and deterministic; rerun it only when the curated
+titles change. The fetch resolves redirects and strips article disambiguators, and it
+fails rather than guessing when a curated title matches no article — but a title that
+resolves to the wrong subject cannot be detected automatically, so review the fetched
+names before committing them.
+
+The build treats these names as a fallback, not a correction: the verified `nameEn`
+values in `src/data/sources.ts` always win, and Wikipedia only fills lists that have no
+verified English name and supplies Russian, which is never curated by hand.

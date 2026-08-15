@@ -21,10 +21,12 @@
     "format:write": "prettier --write .",
     "data:build": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/build.ts",
     "data:validate": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/build.ts --validate-only",
+    "data:translations": "node --disable-warning=ExperimentalWarning --experimental-strip-types src/data/fetch-party-translations.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@solid-primitives/i18n": "^2.2.1",
     "leaflet": "^1.9.4",
     "solid-js": "^1.9.14"
   },

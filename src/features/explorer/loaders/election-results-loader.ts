@@ -7,7 +7,8 @@ export function createElectionResultsLoader(dependencies: {
   selected: Accessor<ElectionMetadata | undefined>;
   active?: Accessor<boolean>;
   loadElection(url: string, signal?: AbortSignal): Promise<ElectionResultsFile>;
-  mismatchMessage: string;
+  /** Read at failure time rather than at construction, so it follows the active locale. */
+  mismatchMessage: () => string;
 }) {
   const [results, setResults] = createSignal<ElectionResultsFile>();
   const [error, setError] = createSignal<unknown>();
@@ -37,7 +38,7 @@ export function createElectionResultsLoader(dependencies: {
       .then((data) => {
         if (disposed || request !== generation) return;
         if (data.electionId === selected.id) setResults(data);
-        else setError(new Error(dependencies.mismatchMessage));
+        else setError(new Error(dependencies.mismatchMessage()));
       })
       .catch((nextError: unknown) => {
         if (!disposed && request === generation && !isAbortError(nextError)) setError(nextError);

@@ -47,15 +47,18 @@ export function colorForShare(share: number | undefined, scale: ThresholdScale):
   return scale.colors[Math.min(colorIndex, scale.colors.length - 1)];
 }
 
-export function displayParty(party: PartyList | undefined): string {
-  if (!party) return "Selected list";
-  return party.nameEn ? `${party.nameEn} · ${party.nameHe}` : party.nameHe;
-}
-
-export function displayLocality(locality: LocalityResult | undefined): string {
-  if (!locality) return "";
-  return locality.nameEn ? `${locality.nameEn} · ${locality.nameHe}` : locality.nameHe;
-}
+/**
+ * Text handling that varies by interface language. Passing it in keeps this module pure and
+ * lets the same row set be filtered and ordered differently per locale.
+ */
+export type TextPolicy = {
+  /** Case folding for search matching. */
+  fold(value: string): string;
+  /** Collation for name ordering. */
+  compare(left: string, right: string): number;
+  /** The locality label the reader actually sees, which is what "sort by name" must follow. */
+  localityName(locality: LocalityResult): string;
+};
 
 export function strongestLocality(
   rows: readonly LocalityResult[],
@@ -115,6 +118,7 @@ export function tableRows(
   rows: readonly LocalityResult[],
   partyId: string,
   filters: { query?: string; turnoutMin?: number; shareMin?: number; minValidVotes?: number },
+  text: Pick<TextPolicy, "fold">,
   comparison?: { rows: readonly LocalityResult[]; partyId: string },
 ): TableRow[] {
   const comparisonById = new Map(comparison?.rows.map((row) => [row.localityId, row]));
@@ -122,7 +126,7 @@ export function tableRows(
   const allRows = comparison
     ? [...new Map([...rows, ...comparison.rows].map((row) => [row.localityId, row])).values()]
     : rows;
-  const needle = filters.query?.trim().toLocaleLowerCase();
+  const needle = filters.query?.trim() ? text.fold(filters.query.trim()) : undefined;
   return allRows
     .filter((locality) => locality.geography === "mappable")
     .map((locality) => ({
@@ -145,7 +149,7 @@ export function tableRows(
         : {}),
     }))
     .filter((row) => {
-      const name = `${row.locality.nameHe} ${row.locality.nameEn ?? ""}`.toLocaleLowerCase();
+      const name = text.fold(`${row.locality.nameHe} ${row.locality.nameEn ?? ""}`);
       return (
         (!needle || name.includes(needle)) &&
         (filters.turnoutMin === undefined || row.turnout >= filters.turnoutMin) &&
@@ -166,12 +170,13 @@ export function sortTableRows(
   rows: readonly TableRow[],
   key: TableSortKey,
   direction: "asc" | "desc",
+  text: Pick<TextPolicy, "compare" | "localityName">,
 ): TableRow[] {
   const multiplier = direction === "asc" ? 1 : -1;
   return [...rows].sort((left, right) => {
     const leftValue =
       key === "name"
-        ? displayLocality(left.locality)
+        ? text.localityName(left.locality)
         : key === "valid"
           ? left.locality.valid
           : key === "rank"
@@ -181,7 +186,7 @@ export function sortTableRows(
               : left[key];
     const rightValue =
       key === "name"
-        ? displayLocality(right.locality)
+        ? text.localityName(right.locality)
         : key === "valid"
           ? right.locality.valid
           : key === "rank"
@@ -190,7 +195,7 @@ export function sortTableRows(
               ? (right.delta ?? -Infinity)
               : right[key];
     if (typeof leftValue === "string" && typeof rightValue === "string")
-      return leftValue.localeCompare(rightValue) * multiplier;
+      return text.compare(leftValue, rightValue) * multiplier;
     return (Number(leftValue) - Number(rightValue)) * multiplier;
   });
 }

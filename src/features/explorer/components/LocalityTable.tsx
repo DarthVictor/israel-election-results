@@ -1,8 +1,7 @@
 import { For, Show } from "solid-js";
 import type { AnalysisState } from "../../../domain/contracts";
-import { displayLocality, tableRows, type TableSortKey } from "../analysis";
-
-const number = new Intl.NumberFormat("en");
+import { useI18n } from "../../../i18n/context";
+import { tableRows, type TableSortKey } from "../analysis";
 
 export function LocalityTable(props: {
   rows: ReturnType<typeof tableRows>;
@@ -15,6 +14,7 @@ export function LocalityTable(props: {
   onSelect(localityId: number): void;
   compareMode: boolean;
 }) {
+  const { t, plural, localityName, formatters } = useI18n();
   const numeric = (field: "turnoutMin" | "shareMin" | "minValidVotes", value: string) =>
     props.onState({ ...props.state, [field]: value === "" ? undefined : Number(value) });
   const sort = (key: TableSortKey) =>
@@ -24,18 +24,18 @@ export function LocalityTable(props: {
     });
   return (
     <section class="table-panel" data-testid="table-panel">
-      <h2>Locality table</h2>
+      <h2>{t("table.title")}</h2>
       <input
         name="table-locality-filter"
-        aria-label="Filter table localities"
+        aria-label={t("table.filterLabel")}
         value={props.tableSearch}
         onInput={(event) => props.setTableSearch(event.currentTarget.value)}
-        placeholder="Filter locality name"
+        placeholder={t("table.filterPlaceholder")}
         autocomplete="off"
       />
       <div class="filter-grid">
         <label>
-          Min turnout
+          {t("table.minTurnout")}
           <input
             name="min-turnout"
             type="number"
@@ -47,7 +47,7 @@ export function LocalityTable(props: {
           />
         </label>
         <label>
-          Min share
+          {t("table.minShare")}
           <input
             name="min-share"
             type="number"
@@ -59,7 +59,7 @@ export function LocalityTable(props: {
           />
         </label>
         <label>
-          Min valid ballots
+          {t("table.minValid")}
           <input
             name="min-valid-ballots"
             type="number"
@@ -70,19 +70,19 @@ export function LocalityTable(props: {
           />
         </label>
       </div>
-      <p class="table-count">{number.format(props.rows.length)} mapped localities</p>
+      <p class="table-count">{plural("table.count", props.rows.length)}</p>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <SortHead label="Locality" field="name" sort={sort} />
-              <SortHead label="Votes" field="votes" sort={sort} />
-              <SortHead label="Share" field="share" sort={sort} />
-              <SortHead label="Turnout" field="turnout" sort={sort} />
-              <SortHead label="Valid" field="valid" sort={sort} />
-              <SortHead label="Rank" field="rank" sort={sort} />
+              <SortHead label={t("table.locality")} field="name" sort={sort} />
+              <SortHead label={t("table.votes")} field="votes" sort={sort} />
+              <SortHead label={t("table.share")} field="share" sort={sort} />
+              <SortHead label={t("table.turnout")} field="turnout" sort={sort} />
+              <SortHead label={t("table.valid")} field="valid" sort={sort} />
+              <SortHead label={t("table.rank")} field="rank" sort={sort} />
               <Show when={props.compareMode}>
-                <SortHead label="Δ pp" field="delta" sort={sort} />
+                <SortHead label={t("table.delta")} field="delta" sort={sort} />
               </Show>
             </tr>
           </thead>
@@ -91,20 +91,24 @@ export function LocalityTable(props: {
               {(row) => (
                 <tr>
                   <td>
-                    <button type="button" onClick={() => props.onSelect(row.locality.localityId)}>
-                      {displayLocality(row.locality)}
+                    <button
+                      type="button"
+                      title={localityName(row.locality)}
+                      onClick={() => props.onSelect(row.locality.localityId)}
+                    >
+                      {localityName(row.locality)}
                     </button>
                   </td>
-                  <td>{number.format(row.votes)}</td>
-                  <td>{row.share.toFixed(1)}%</td>
-                  <td>{row.turnout.toFixed(1)}%</td>
-                  <td>{number.format(row.locality.valid)}</td>
+                  <td>{formatters().number.format(row.votes)}</td>
+                  <td>{formatters().percent.format(row.share / 100)}</td>
+                  <td>{formatters().percent.format(row.turnout / 100)}</td>
+                  <td>{formatters().number.format(row.locality.valid)}</td>
                   <td>{row.locality.partyRanks[props.state.party] ?? "—"}</td>
                   <Show when={props.compareMode}>
                     <td>
                       {row.delta === undefined
-                        ? "No data"
-                        : `${row.delta >= 0 ? "+" : ""}${row.delta.toFixed(1)}`}
+                        ? t("table.noData")
+                        : formatters().points.format(row.delta)}
                     </td>
                   </Show>
                 </tr>

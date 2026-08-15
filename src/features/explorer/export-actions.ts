@@ -4,7 +4,8 @@ import type {
   LocalityResult,
   PartyList,
 } from "../../domain/contracts";
-import { displayLocality, displayParty, strongestLocality, type TableRow } from "./analysis";
+import type { I18n } from "../../i18n/create-i18n";
+import { strongestLocality, type TableRow } from "./analysis";
 import { analysisCsv, analysisSvg } from "./exports";
 import type { ExplorerFeature } from "./topology";
 
@@ -15,6 +16,7 @@ export type ExportBrowser = {
 };
 
 export type ExportSnapshot = {
+  i18n: I18n;
   rows: readonly TableRow[];
   state: AnalysisState;
   election?: ElectionMetadata;
@@ -48,28 +50,34 @@ export function exportCsv(snapshot: ExportSnapshot, browser: ExportBrowser): boo
 }
 
 export async function exportPng(snapshot: ExportSnapshot, browser: ExportBrowser): Promise<void> {
+  const { t, plural, partyName, localityName } = snapshot.i18n;
   const isCompare = snapshot.comparisonReady;
   if (
     !snapshot.geometry.length ||
     !snapshot.localityRows.length ||
     (snapshot.state.mode === "compare" && !isCompare)
   ) {
-    throw new Error("Wait for geometry and active comparison data before exporting PNG.");
+    throw new Error(t("actions.pngWaitForData"));
   }
+  const strongest = strongestLocality(snapshot.localityRows, snapshot.state.party);
+  // The manifest label is English-only, so the poster names each election by Knesset number.
+  const electionLabel = (id?: number) =>
+    id === undefined ? "" : plural("controls.knesset", id, "ordinal");
   const svg = analysisSvg({
+    i18n: snapshot.i18n,
     features: snapshot.geometry,
     rows: snapshot.localityRows,
     partyId: snapshot.state.party,
     title: isCompare
-      ? "Locality comparison"
-      : (snapshot.party?.nameEn ?? snapshot.party?.nameHe ?? "Election results"),
+      ? t("poster.comparisonTitle")
+      : partyName(snapshot.party) || t("poster.resultsTitle"),
     context: isCompare
-      ? `${snapshot.election?.label}: ${displayParty(snapshot.party)}  |  ${snapshot.compareElection?.label}: ${displayParty(snapshot.compareParty)}`
-      : `${snapshot.election?.label} · ${displayParty(snapshot.party)}`,
-    insight: strongestLocality(snapshot.localityRows, snapshot.state.party)
-      ? `Strongest locality: ${displayLocality(strongestLocality(snapshot.localityRows, snapshot.state.party))}`
-      : "No mappable locality data",
-    source: snapshot.election?.sourceUrl ?? "Official Central Elections Committee data",
+      ? `${electionLabel(snapshot.election?.id)}: ${partyName(snapshot.party)}  |  ${electionLabel(snapshot.compareElection?.id)}: ${partyName(snapshot.compareParty)}`
+      : `${electionLabel(snapshot.election?.id)} · ${partyName(snapshot.party)}`,
+    insight: strongest
+      ? t("poster.strongest", { locality: localityName(strongest) })
+      : t("poster.noData"),
+    source: snapshot.election?.sourceUrl ?? t("poster.source"),
     ...(isCompare
       ? { comparison: { rows: snapshot.comparisonRows, partyId: snapshot.compareParty!.id } }
       : {}),

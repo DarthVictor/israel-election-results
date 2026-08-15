@@ -5,10 +5,12 @@ import type {
   ElectionResultsFile,
   PartyList,
 } from "../../../domain/contracts";
+import type { I18n } from "../../../i18n/create-i18n";
 import { comparisonLocalities } from "../analysis";
 
 /** Reactive presentation data for the Explore surface, independent of UI components. */
 export function createExploreView(dependencies: {
+  i18n: I18n;
   state: Accessor<AnalysisState>;
   election: Accessor<ElectionMetadata | undefined>;
   compareElection: Accessor<ElectionMetadata | undefined>;
@@ -45,11 +47,14 @@ export function createExploreView(dependencies: {
     comparisonRows().find((row) => row.localityId === dependencies.state().locality),
   );
   const queryMatches = createMemo(() => {
-    const needle = search().trim().toLocaleLowerCase();
+    // Case folding follows the interface language rather than the host environment, so the
+    // same query behaves identically for every reader of a given locale.
+    const fold = dependencies.i18n.fold;
+    const needle = fold(search().trim());
     return !needle
       ? []
       : selectableRows()
-          .filter((row) => `${row.nameHe} ${row.nameEn ?? ""}`.toLocaleLowerCase().includes(needle))
+          .filter((row) => fold(`${row.nameHe} ${row.nameEn ?? ""}`).includes(needle))
           .slice(0, 8);
   });
   const nationalShare = createMemo(() => {

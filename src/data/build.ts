@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { MANIFEST_SCHEMA_VERSION } from "../domain/contracts.ts";
 import { readElection } from "./csv.ts";
 import { englishNamesFrom, readLocalities, toTopology } from "./localities.ts";
+import { readPartyNames, withTranslations } from "./party-names.ts";
 import { ELECTION_SOURCES } from "./sources.ts";
 
 const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -26,6 +27,10 @@ const sum = (rows: { eligible: number; voters: number; valid: number; invalid: n
 export const build = async () => {
   const localities = await readLocalities(resolve(repoRoot, "data/raw/localities.json"));
   const englishNames = englishNamesFrom(localities);
+  const partyNames = await readPartyNames(
+    resolve(repoRoot, "data/raw/party-wikipedia.json"),
+    resolve(repoRoot, "data/raw/party-names.json"),
+  );
   const results = await Promise.all(
     ELECTION_SOURCES.map((source) =>
       readElection(source, resolve(repoRoot, source.rawPath), englishNames),
@@ -40,7 +45,7 @@ export const build = async () => {
       label: source.label,
       sourceUrl: source.sourceUrl,
       sourceCsvUrl: source.sourceCsvUrl,
-      parties: [...source.parties],
+      parties: withTranslations(source.id, source.parties, partyNames),
       nationalTotals: sum(results[index].localities),
     })),
     unmatchedReport: {
