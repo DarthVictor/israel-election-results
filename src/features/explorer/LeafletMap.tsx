@@ -1,6 +1,7 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import L from "leaflet";
 import type { LocalityResult } from "../../domain/contracts";
+import { useI18n } from "../../i18n/context";
 import {
   colorForComparison,
   colorForShare,
@@ -22,6 +23,7 @@ type LeafletMapProps = {
 const selectedStyle: L.PathOptions = { color: "#0038b8", weight: 2.5, fillOpacity: 0.92 };
 
 export function LeafletMap(props: LeafletMapProps) {
+  const { t } = useI18n();
   let element: HTMLDivElement | undefined;
   let map: L.Map | undefined;
   let localitiesLayer: L.GeoJSON | undefined;
@@ -143,7 +145,7 @@ export function LeafletMap(props: LeafletMapProps) {
       ref={(node) => {
         element = node;
       }}
-      aria-label="Interactive locality result map"
+      aria-label={t("map.interactive")}
       data-testid="leaflet-map"
     />
   );

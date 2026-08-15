@@ -2,6 +2,9 @@ import { createRoot, createSignal } from "solid-js";
 import { describe, expect, it } from "vitest";
 import type { AnalysisState, LocalityResult } from "../../../domain/contracts";
 import { createTableView } from "./create-table-view";
+import { createStaticI18n } from "../../../i18n/create-i18n";
+
+const i18n = createStaticI18n("en");
 
 const locality = (localityId: number, nameEn: string, votes: number): LocalityResult => ({
   localityId,
@@ -33,6 +36,7 @@ describe("Table view", () => {
         locality(3, "Gamma", 20),
       ]);
       view = createTableView({
+        i18n,
         state,
         compareParty: () => undefined,
         rows,

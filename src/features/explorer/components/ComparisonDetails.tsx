@@ -1,12 +1,7 @@
 import { Show } from "solid-js";
 import type { LocalityResult, PartyList } from "../../../domain/contracts";
-import { comparisonDelta, displayLocality, partyShare } from "../analysis";
-
-const percent = new Intl.NumberFormat("en", {
-  style: "percent",
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
+import { useI18n } from "../../../i18n/context";
+import { comparisonDelta, partyShare } from "../analysis";
 
 export function ComparisonDetails(props: {
   first?: LocalityResult;
@@ -15,38 +10,43 @@ export function ComparisonDetails(props: {
   secondParty?: PartyList;
   partyId: string;
 }) {
+  const { t, partyName, localityName, formatters } = useI18n();
   const delta = () =>
     comparisonDelta(props.first, props.partyId, props.second, props.secondParty?.id ?? "");
 
   return (
     <section class="locality-panel" aria-live="polite" data-testid="selected-locality">
-      <p class="eyebrow">Independent A / B locality comparison</p>
-      <h2>{displayLocality(props.first ?? props.second)}</h2>
+      <p class="eyebrow">{t("comparison.title")}</p>
+      <h2>{localityName(props.first ?? props.second)}</h2>
       <Show
         when={props.first && props.second}
-        fallback={
-          <p class="comparison-note">
-            This locality is present in only one election, so a change cannot be calculated.
-          </p>
-        }
+        fallback={<p class="comparison-note">{t("comparison.singleElection")}</p>}
       >
         <div class="comparison-result">
           <div>
-            <span>A · {props.firstParty?.nameEn ?? props.firstParty?.nameHe}</span>
-            <strong>{percent.format(partyShare(props.first!, props.partyId) / 100)}</strong>
-          </div>
-          <div>
-            <span>B · {props.secondParty?.nameEn ?? props.secondParty?.nameHe}</span>
+            <span>
+              {t("comparison.first")} · {partyName(props.firstParty)}
+            </span>
             <strong>
-              {percent.format(partyShare(props.second!, props.secondParty?.id ?? "") / 100)}
+              {formatters().percent.format(partyShare(props.first!, props.partyId) / 100)}
             </strong>
           </div>
           <div>
-            <span>Change</span>
+            <span>
+              {t("comparison.second")} · {partyName(props.secondParty)}
+            </span>
+            <strong>
+              {formatters().percent.format(
+                partyShare(props.second!, props.secondParty?.id ?? "") / 100,
+              )}
+            </strong>
+          </div>
+          <div>
+            <span>{t("comparison.change")}</span>
             <strong>
               {delta() === undefined
-                ? "No data"
-                : `${delta()! >= 0 ? "+" : ""}${delta()!.toFixed(1)} pp`}
+                ? t("comparison.noData")
+                : `${formatters().points.format(delta()!)} ${t("units.points")}`}
             </strong>
           </div>
         </div>

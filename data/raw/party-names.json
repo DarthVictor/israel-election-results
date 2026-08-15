@@ -1,0 +1,310 @@
+{
+  "21:אמת": {
+    "en": "Israeli Labor Party",
+    "ru": "Авода"
+  },
+  "21:ג": {
+    "en": "United Torah Judaism",
+    "ru": "Яхадут ха-Тора"
+  },
+  "21:ום": {
+    "en": "Hadash–Ta'al",
+    "ru": null
+  },
+  "21:ז": {
+    "en": "Zehut",
+    "ru": "Зеут"
+  },
+  "21:זנ": {
+    "en": "Yachad",
+    "ru": null
+  },
+  "21:זץ": {
+    "en": "Tzomet",
+    "ru": "Цомет"
+  },
+  "21:טב": {
+    "en": "Union of Right-Wing Parties",
+    "ru": "Союз правых партий"
+  },
+  "21:כ": {
+    "en": "Kulanu",
+    "ru": "Кулану"
+  },
+  "21:ל": {
+    "en": "Yisrael Beiteinu",
+    "ru": "Наш дом Израиль"
+  },
+  "21:מחל": {
+    "en": "Likud",
+    "ru": "Ликуд"
+  },
+  "21:מרצ": {
+    "en": "Meretz",
+    "ru": "Мерец"
+  },
+  "21:נ": {
+    "en": "New Right",
+    "ru": "Новые правые"
+  },
+  "21:נר": {
+    "en": "Gesher",
+    "ru": "Гешер"
+  },
+  "21:פה": {
+    "en": "Blue and White",
+    "ru": "Кахоль-лаван"
+  },
+  "21:ףז": {
+    "en": "Pirate Party of Israel",
+    "ru": null
+  },
+  "21:ץ": {
+    "en": "Da'am Workers Party",
+    "ru": "ДААМ"
+  },
+  "21:קי": {
+    "en": "Eretz Yisrael Shelanu",
+    "ru": "Эрец Исраэль шелану"
+  },
+  "21:שס": {
+    "en": "Shas",
+    "ru": "ШАС"
+  },
+  "22:אמת": {
+    "en": "Labor-Gesher",
+    "ru": null
+  },
+  "22:ג": {
+    "en": "United Torah Judaism",
+    "ru": "Яхадут ха-Тора"
+  },
+  "22:ודעם": {
+    "en": "Joint List",
+    "ru": "Объединённый список"
+  },
+  "22:זן": {
+    "en": "Zehut",
+    "ru": "Зеут"
+  },
+  "22:זץ": {
+    "en": "Tzomet",
+    "ru": "Цомет"
+  },
+  "22:טב": {
+    "en": "Yamina",
+    "ru": "Ямина"
+  },
+  "22:כ": {
+    "en": "Noam",
+    "ru": "Ноам"
+  },
+  "22:כף": {
+    "en": "Otzma Yehudit",
+    "ru": "Оцма Йехудит"
+  },
+  "22:ל": {
+    "en": "Yisrael Beiteinu",
+    "ru": "Наш дом Израиль"
+  },
+  "22:מחל": {
+    "en": "Likud",
+    "ru": "Ликуд"
+  },
+  "22:מרצ": {
+    "en": "Democratic Union",
+    "ru": "Ха-махане ха-демократи"
+  },
+  "22:פה": {
+    "en": "Blue and White",
+    "ru": "Кахоль-лаван"
+  },
+  "22:ףז": {
+    "en": "Pirate Party of Israel",
+    "ru": null
+  },
+  "22:ץ": {
+    "en": "Da'am Workers Party",
+    "ru": "ДААМ"
+  },
+  "22:שס": {
+    "en": "Shas",
+    "ru": "ШАС"
+  },
+  "23:אמת": {
+    "en": "Labor-Gesher-Meretz",
+    "ru": null
+  },
+  "23:ג": {
+    "en": "United Torah Judaism",
+    "ru": "Яхадут ха-Тора"
+  },
+  "23:ודעם": {
+    "en": "Joint List",
+    "ru": "Объединённый список"
+  },
+  "23:זץ": {
+    "en": "Tzomet",
+    "ru": "Цомет"
+  },
+  "23:טב": {
+    "en": "Yamina",
+    "ru": "Ямина"
+  },
+  "23:ל": {
+    "en": "Yisrael Beiteinu",
+    "ru": "Наш дом Израиль"
+  },
+  "23:מחל": {
+    "en": "Likud",
+    "ru": "Ликуд"
+  },
+  "23:נץ": {
+    "en": "Otzma Yehudit",
+    "ru": "Оцма Йехудит"
+  },
+  "23:פה": {
+    "en": "Blue and White",
+    "ru": "Кахоль-лаван"
+  },
+  "23:ףז": {
+    "en": "Pirate Party of Israel",
+    "ru": null
+  },
+  "23:ץ": {
+    "en": "Da'am Workers Party",
+    "ru": "ДААМ"
+  },
+  "23:שס": {
+    "en": "Shas",
+    "ru": "ШАС"
+  },
+  "24:אמת": {
+    "en": "Israeli Labor Party",
+    "ru": "Авода"
+  },
+  "24:ב": {
+    "en": "Yamina",
+    "ru": "Ямина"
+  },
+  "24:ג": {
+    "en": "United Torah Judaism",
+    "ru": "Яхадут ха-Тора"
+  },
+  "24:ודעם": {
+    "en": "Joint List",
+    "ru": "Объединённый список"
+  },
+  "24:זץ": {
+    "en": "Tzomet",
+    "ru": "Цомет"
+  },
+  "24:ט": {
+    "en": "Religious Zionism",
+    "ru": "Религиозный сионизм"
+  },
+  "24:כן": {
+    "en": "Blue and White",
+    "ru": "Кахоль Лаван Хосен ле-Исраэль"
+  },
+  "24:ל": {
+    "en": "Yisrael Beiteinu",
+    "ru": "Наш дом Израиль"
+  },
+  "24:מחל": {
+    "en": "Likud",
+    "ru": "Ликуд"
+  },
+  "24:מרצ": {
+    "en": "Meretz",
+    "ru": "Мерец"
+  },
+  "24:עם": {
+    "en": "United Arab List",
+    "ru": "Объединённый арабский список"
+  },
+  "24:פה": {
+    "en": "Yesh Atid",
+    "ru": "Еш атид"
+  },
+  "24:ףז": {
+    "en": "Pirate Party of Israel",
+    "ru": null
+  },
+  "24:ץ": {
+    "en": "Da'am Workers Party",
+    "ru": "ДААМ"
+  },
+  "24:רף": {
+    "en": "Am Shalem",
+    "ru": null
+  },
+  "24:שס": {
+    "en": "Shas",
+    "ru": "ШАС"
+  },
+  "24:ת": {
+    "en": "New Hope",
+    "ru": "Тиква Хадаша"
+  },
+  "25:אמת": {
+    "en": "Israeli Labor Party",
+    "ru": "Авода"
+  },
+  "25:ב": {
+    "en": "The Jewish Home",
+    "ru": "Еврейский дом"
+  },
+  "25:ג": {
+    "en": "United Torah Judaism",
+    "ru": "Яхадут ха-Тора"
+  },
+  "25:ד": {
+    "en": "Balad",
+    "ru": "Балад"
+  },
+  "25:ום": {
+    "en": "Hadash–Ta'al",
+    "ru": null
+  },
+  "25:זץ": {
+    "en": "Tzomet",
+    "ru": "Цомет"
+  },
+  "25:ט": {
+    "en": "Religious Zionism",
+    "ru": "Религиозный сионизм"
+  },
+  "25:כן": {
+    "en": "National Unity",
+    "ru": "Ха-махане ха-мамлахти"
+  },
+  "25:ל": {
+    "en": "Yisrael Beiteinu",
+    "ru": "Наш дом Израиль"
+  },
+  "25:מחל": {
+    "en": "Likud",
+    "ru": "Ликуд"
+  },
+  "25:מרצ": {
+    "en": "Meretz",
+    "ru": "Мерец"
+  },
+  "25:עם": {
+    "en": "United Arab List",
+    "ru": "Объединённый арабский список"
+  },
+  "25:ף": {
+    "en": "Pirate Party of Israel",
+    "ru": null
+  },
+  "25:פה": {
+    "en": "Yesh Atid",
+    "ru": "Еш атид"
+  },
+  "25:שס": {
+    "en": "Shas",
+    "ru": "ШАС"
+  }
+}

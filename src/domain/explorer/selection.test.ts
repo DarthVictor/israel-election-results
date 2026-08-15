@@ -21,8 +21,8 @@ const manifest: ElectionManifest = {
       sourceCsvUrl: "https://example.test/24.csv",
       dataUrl: "/data/elections/24.json",
       parties: [
-        { id: "YESH-ATID", nameHe: "יש עתיד", nameEn: "Yesh Atid" },
-        { id: "LIKUD", nameHe: "מחל", nameEn: "Likud" },
+        { id: "YESH-ATID", nameHe: "יש עתיד", nameEn: "Yesh Atid", nameRu: null },
+        { id: "LIKUD", nameHe: "מחל", nameEn: "Likud", nameRu: null },
       ],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },
@@ -34,8 +34,8 @@ const manifest: ElectionManifest = {
       sourceCsvUrl: "https://example.test/25.csv",
       dataUrl: "/data/elections/25.json",
       parties: [
-        { id: "LIKUD", nameHe: "מחל", nameEn: "Likud" },
-        { id: "LABOR", nameHe: "אמת", nameEn: "Labor" },
+        { id: "LIKUD", nameHe: "מחל", nameEn: "Likud", nameRu: null },
+        { id: "LABOR", nameHe: "אמת", nameEn: "Labor", nameRu: null },
       ],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },

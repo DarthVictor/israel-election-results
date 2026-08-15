@@ -8,8 +8,11 @@ import type {
 } from "../../../domain/contracts";
 import type { ExplorerFeature } from "../topology";
 import { createMapView } from "./create-map-view";
+import { createStaticI18n } from "../../../i18n/create-i18n";
 
-const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud" };
+const i18n = createStaticI18n("en");
+
+const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud", nameRu: null };
 const locality: LocalityResult = {
   localityId: 1,
   nameHe: "×™×™×©×•×‘",
@@ -24,7 +27,7 @@ const locality: LocalityResult = {
   hasGeometry: true,
 };
 const result: ElectionResultsFile = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   electionId: 25,
   localities: [locality],
   unmatchedLocalityIds: [],
@@ -53,6 +56,7 @@ describe("Map view", () => {
       const [comparisonReady] = createSignal(false);
       const [comparisonError, setComparisonError] = createSignal<unknown>();
       map = createMapView({
+        t: i18n.t,
         state,
         geometry,
         geometryError,

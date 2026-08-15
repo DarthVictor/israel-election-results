@@ -11,6 +11,10 @@ import {
   tableRows,
   turnout,
 } from "./analysis";
+import { createStaticI18n } from "../../i18n/create-i18n";
+
+const i18n = createStaticI18n("en");
+const text = { fold: i18n.fold, compare: i18n.compare, localityName: i18n.localityName };
 
 const row = (localityId: number, votes: number, valid = 100): LocalityResult => ({
   localityId,
@@ -61,10 +65,10 @@ describe("explorer analysis", () => {
     const hidden = row(3, 90);
     hidden.geography = "unmatchedBoundary";
 
-    const filtered = tableRows([first, second, hidden], "LIKUD", { shareMin: 30 });
+    const filtered = tableRows([first, second, hidden], "LIKUD", { shareMin: 30 }, text);
     expect(filtered.map((item) => item.locality.localityId)).toEqual([1]);
     expect(
-      sortTableRows(tableRows([first, second], "LIKUD", {}), "rank", "asc").map(
+      sortTableRows(tableRows([first, second], "LIKUD", {}, text), "rank", "asc", text).map(
         (item) => item.locality.localityId,
       ),
     ).toEqual([2, 1]);
@@ -76,7 +80,7 @@ describe("explorer analysis", () => {
     const second = row(2, 40);
     second.nameEn = "B only";
     const all = comparisonLocalities([first], [second]);
-    const rows = tableRows([first], "LIKUD", {}, { rows: [second], partyId: "LIKUD" });
+    const rows = tableRows([first], "LIKUD", {}, text, { rows: [second], partyId: "LIKUD" });
     expect(all.map((item) => item.localityId)).toEqual([1, 2]);
     expect(rows.map((item) => item.locality.nameEn)).toEqual(["A only", "B only"]);
     expect(rows[1].first).toBeUndefined();

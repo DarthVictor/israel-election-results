@@ -1,14 +1,17 @@
+import { useI18n } from "../../../i18n/context";
+
 export function ExportActions(props: { onCopy(): void; onCsv(): void; onPng(): void }) {
+  const { t } = useI18n();
   return (
     <div class="action-row">
       <button type="button" onClick={() => props.onCopy()} data-testid="copy-link">
-        Copy link
+        {t("exports.copyLink")}
       </button>
       <button type="button" onClick={() => props.onCsv()} data-testid="export-csv">
-        CSV
+        {t("exports.csv")}
       </button>
       <button type="button" onClick={() => props.onPng()} data-testid="export-png">
-        PNG
+        {t("exports.png")}
       </button>
     </div>
   );

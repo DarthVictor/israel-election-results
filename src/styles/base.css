@@ -3,6 +3,8 @@
 :root {
   color: #102a43;
   background: #f4f8fc;
+  /* Segoe UI and the system UI fonts cover Hebrew and Cyrillic; Arial closes the gap on
+     platforms where they do not, before the generic sans-serif fallback. */
   font-family:
     Inter,
     ui-sans-serif,
@@ -10,8 +12,18 @@
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
+    Arial,
     sans-serif;
   font-synthesis: none;
+}
+
+/**
+ * Leaflet ships no right-to-left styles: under dir="rtl" its control corners, attribution,
+ * and zoom buttons invert and overlap. The map is a viewport of its own, so pinning it to
+ * ltr leaves Leaflet in the only direction it was built for.
+ */
+.leaflet-container {
+  direction: ltr;
 }
 
 * {
@@ -47,7 +59,7 @@ a:focus-visible {
   position: fixed;
   z-index: 100;
   top: 0.75rem;
-  left: 0.75rem;
+  inset-inline-start: 0.75rem;
   transform: translateY(-200%);
   border-radius: 0.45rem;
   background: #102a43;
@@ -80,11 +92,31 @@ a:focus-visible {
   text-underline-offset: 0.22rem;
   white-space: nowrap;
 }
+/**
+ * Its own wrapper rather than a child of .source-links, which restacks to a column on
+ * mobile — the switcher should not inherit that.
+ */
+.header-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 0.6rem;
+}
 .source-links {
   display: flex;
   justify-content: end;
   gap: 0.85rem;
   flex-wrap: wrap;
+}
+.locale-switcher {
+  /* Overrides the full-width form baseline; in the header it should size to its content. */
+  width: auto;
+  padding: 0.34rem 0.5rem;
+  border: 1px solid #b8d1e5;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #163d5c;
+  font-size: 0.82rem;
 }
 .site-footer {
   display: flex;
@@ -127,7 +159,7 @@ a:focus-visible {
   z-index: 2;
   overflow: auto;
   padding: 1.4rem;
-  border-right: 1px solid #c8d9e8;
+  border-inline-end: 1px solid #c8d9e8;
   background: #fbfdff;
 }
 .sheet-toggle {
@@ -253,11 +285,11 @@ a:focus-visible {
   position: sticky;
   top: 0;
   background: #e9f3fb;
-  text-align: right;
+  text-align: end;
 }
 .table-wrap th:first-child,
 .table-wrap td:first-child {
-  text-align: left;
+  text-align: start;
 }
 .table-wrap th button {
   width: 100%;
@@ -270,7 +302,7 @@ a:focus-visible {
 .table-wrap td {
   padding: 0.44rem 0.35rem;
   border-top: 1px solid #e3edf5;
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -280,9 +312,17 @@ a:focus-visible {
   background: transparent;
   padding: 0;
   color: #0b5ea8;
-  text-align: left;
+  text-align: start;
   text-decoration: underline;
   text-underline-offset: 0.15rem;
+  /* The cell caps its width but inherits nowrap, so a long name used to paint straight over
+     the votes column. Ellipsis keeps the longest paired names inside their own cell; the
+     full name stays available from the button's title. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* overflow on an inline-block aligns to its bottom margin edge instead of the baseline,
+     which would drop this cell below the rest of the row. */
+  vertical-align: bottom;
 }
 .control-stack {
   display: grid;
@@ -375,7 +415,7 @@ select {
   background: transparent;
   padding: 0.58rem;
   color: #163d5c;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 .search-results button:hover {
@@ -518,13 +558,14 @@ select {
 .map-error {
   position: absolute;
   z-index: 20;
-  inset: 1rem auto auto 1rem;
+  inset-block: 1rem auto;
+  inset-inline: 1rem auto;
   width: min(20rem, calc(100% - 2rem));
 }
 .map-legend {
   position: absolute;
   z-index: 10;
-  right: 1rem;
+  inset-inline-end: 1rem;
   bottom: 1.8rem;
   width: 11rem;
   padding: 0.75rem;
@@ -625,7 +666,7 @@ select {
   .site-header a {
     font-size: 0.74rem;
     white-space: normal;
-    text-align: right;
+    text-align: end;
   }
   .source-links {
     flex-direction: column;
@@ -653,9 +694,8 @@ select {
   .analysis-panel {
     position: absolute;
     z-index: 30;
-    right: 0;
+    inset-inline: 0;
     bottom: 0;
-    left: 0;
     height: min(72dvh, 38rem);
     max-height: calc(100% - 2rem);
     padding: 0;
@@ -689,7 +729,7 @@ select {
   .sheet-toggle::before {
     position: absolute;
     top: 0.45rem;
-    left: calc(50% - 1.2rem);
+    inset-inline-start: calc(50% - 1.2rem);
     width: 2.4rem;
     height: 0.24rem;
     border-radius: 1rem;
@@ -709,7 +749,7 @@ select {
     margin-top: 1rem;
   }
   .map-legend {
-    right: 0.65rem;
+    inset-inline-end: 0.65rem;
     bottom: 4.85rem;
   }
   .leaflet-control-zoom {

@@ -1,7 +1,16 @@
 import { Show, type JSX } from "solid-js";
+import { useI18n } from "../../../i18n/context";
+import { DataError } from "../data";
+import type { Translate } from "../../../i18n/translate";
 
-const errorText = (error: unknown) =>
-  error instanceof Error ? error.message : "Something went wrong while loading the explorer.";
+/**
+ * Data-layer failures arrive as codes rather than sentences, so the message is chosen here,
+ * in the active language, instead of being frozen in English where the error was thrown.
+ */
+const errorText = (error: unknown, t: Translate) => {
+  if (error instanceof DataError) return t(error.key, error.args);
+  return error instanceof Error ? error.message : t("status.unknownError");
+};
 
 export function LoadingScreen(props: { label: string }) {
   return (
@@ -12,16 +21,17 @@ export function LoadingScreen(props: { label: string }) {
 }
 
 export function ErrorPanel(props: { error: unknown; onRetry(): void; compact?: boolean }) {
+  const { t } = useI18n();
   return (
     <section
       class={props.compact ? "error-panel compact" : "error-panel"}
       role="alert"
       data-testid="load-error"
     >
-      <h2>Data could not load</h2>
-      <p>{errorText(props.error)}</p>
+      <h2>{t("status.loadFailed")}</h2>
+      <p>{errorText(props.error, t)}</p>
       <button type="button" onClick={() => props.onRetry()} data-testid="retry-load">
-        Try again
+        {t("status.retry")}
       </button>
     </section>
   );
@@ -33,12 +43,13 @@ export function ResultsStatus(props: {
   onRetry(): void;
   children: JSX.Element;
 }) {
+  const { t } = useI18n();
   return (
     <Show
       when={!props.loading}
       fallback={
         <p class="status-message" role="status">
-          Loading locality results…
+          {t("status.loadingResults")}
         </p>
       }
     >

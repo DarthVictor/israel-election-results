@@ -1,5 +1,6 @@
 import type { Accessor } from "solid-js";
 import type { ElectionManifest } from "../../../domain/contracts";
+import type { I18n } from "../../../i18n/create-i18n";
 import type { ExplorerActionBrowser } from "../actions/create-explorer-actions";
 import type { AnalysisSelection } from "../selection/create-analysis-selection";
 import type { createExploreView } from "../views/create-explore-view";
@@ -31,6 +32,8 @@ export type ExplorerFeature = {
 };
 
 export type ExplorerFeatureDependencies = {
+  /** Injected rather than read from context, so these slices stay free of a component tree. */
+  i18n: I18n;
   data: {
     loadManifest(signal?: AbortSignal): Promise<ElectionManifest>;
     loadElection(

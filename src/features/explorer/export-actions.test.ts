@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { ExportBrowser, ExportSnapshot } from "./export-actions";
 import { exportCsv, exportPng } from "./export-actions";
+import { createStaticI18n } from "../../i18n/create-i18n";
+
+const i18n = createStaticI18n("en");
 
 const snapshot: ExportSnapshot = {
+  i18n,
   rows: [],
   state: { mode: "explore", election: 25, party: "LIKUD" },
   localityRows: [],

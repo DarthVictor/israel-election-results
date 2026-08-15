@@ -14,7 +14,7 @@ const election: ElectionMetadata = {
   nationalTotals: { eligible: 0, voters: 0, valid: 0, invalid: 0 },
 };
 const result: ElectionResultsFile = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   electionId: 25,
   localities: [],
   unmatchedLocalityIds: [],
@@ -44,7 +44,7 @@ describe("Election results loader", () => {
           if (attempts === 1) throw new Error("temporary");
           return result;
         },
-        mismatchMessage: "mismatch",
+        mismatchMessage: () => "mismatch",
       });
     });
     await settle();
@@ -70,7 +70,7 @@ describe("Election results loader", () => {
             if (url === election.dataUrl) resolveFirst = resolve;
             else resolveSecond = resolve;
           }),
-        mismatchMessage: "mismatch",
+        mismatchMessage: () => "mismatch",
       });
     });
     await settle();
@@ -97,7 +97,7 @@ describe("Election results loader", () => {
           new Promise((resolve) => {
             resolveRequest = resolve;
           }),
-        mismatchMessage: "mismatch",
+        mismatchMessage: () => "mismatch",
       });
     });
 

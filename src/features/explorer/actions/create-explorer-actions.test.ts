@@ -8,10 +8,13 @@ import type {
 } from "../../../domain/contracts";
 import type { ExplorerFeature } from "../topology";
 import { createExplorerActions } from "./create-explorer-actions";
+import { createStaticI18n } from "../../../i18n/create-i18n";
 
-const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud" };
+const i18n = createStaticI18n("en");
+
+const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud", nameRu: null };
 const manifest: ElectionManifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   geometryUrl: "/geometry",
   elections: [],
 };
@@ -50,6 +53,7 @@ function actionsHarness(browser?: Parameters<typeof createExplorerActions>[0]["b
   createRoot(() => {
     const [currentState] = createSignal(state);
     actions = createExplorerActions({
+      i18n,
       manifest: () => manifest,
       state: currentState,
       writeState: (_next, replace) => writes.push(Boolean(replace)),

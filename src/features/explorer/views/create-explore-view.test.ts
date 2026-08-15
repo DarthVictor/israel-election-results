@@ -8,8 +8,11 @@ import type {
   PartyList,
 } from "../../../domain/contracts";
 import { createExploreView } from "./create-explore-view";
+import { createStaticI18n } from "../../../i18n/create-i18n";
 
-const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud" };
+const i18n = createStaticI18n("en");
+
+const party: PartyList = { id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud", nameRu: null };
 const election: ElectionMetadata = {
   id: 25,
   date: "2022-11-01",
@@ -35,7 +38,7 @@ const locality = (localityId: number, nameEn: string, votes: number): LocalityRe
   hasGeometry: true,
 });
 const result = (electionId: number, localities: LocalityResult[]): ElectionResultsFile => ({
-  schemaVersion: 1,
+  schemaVersion: 2,
   electionId,
   localities,
   unmatchedLocalityIds: [],
@@ -62,6 +65,7 @@ describe("Explore view", () => {
         result(24, [locality(2, "Shared", 40), locality(3, "Bravo", 70)]),
       );
       view = createExploreView({
+        i18n,
         state,
         election: () => election,
         compareElection: () => comparisonElection,

@@ -6,6 +6,7 @@ import type {
   LocalityResult,
   PartyList,
 } from "../../../domain/contracts";
+import type { I18n } from "../../../i18n/create-i18n";
 import type { TableRow } from "../analysis";
 import { exportCsv, exportPng, type ExportBrowser, type ExportSnapshot } from "../export-actions";
 import type { ExplorerFeature } from "../topology";
@@ -17,6 +18,7 @@ export type ExplorerActionBrowser = {
 
 /** Browser-capability adapter. The feature supplies data, browser code supplies effects. */
 export function createExplorerActions(dependencies: {
+  i18n: I18n;
   manifest: Accessor<ElectionManifest | undefined>;
   state: Accessor<AnalysisState>;
   writeState(next: AnalysisState, replace?: boolean): void;
@@ -32,8 +34,10 @@ export function createExplorerActions(dependencies: {
   localityRows: Accessor<LocalityResult[]>;
   browser?: ExplorerActionBrowser;
 }) {
+  const { t } = dependencies.i18n;
   const [status, setStatus] = createSignal("");
   const snapshot = (): ExportSnapshot => ({
+    i18n: dependencies.i18n,
     rows: dependencies.filteredTable(),
     state: dependencies.state(),
     election: dependencies.election(),
@@ -48,27 +52,31 @@ export function createExplorerActions(dependencies: {
   const copyLink = async () => {
     if (dependencies.manifest()) dependencies.writeState(dependencies.state(), true);
     try {
-      if (!dependencies.browser?.clipboard) throw new Error("Clipboard is unavailable.");
+      if (!dependencies.browser?.clipboard) throw new Error(t("actions.clipboardUnavailable"));
       await dependencies.browser.clipboard.writeText(dependencies.currentUrl());
-      setStatus("Analysis link copied to your clipboard.");
+      setStatus(t("actions.linkCopied"));
     } catch {
-      setStatus("Copy this analysis link from your browser address bar.");
+      setStatus(t("actions.copyFromAddressBar"));
     }
   };
   const downloadCsv = () => {
     const browser = dependencies.browser?.exports;
     setStatus(
-      browser && exportCsv(snapshot(), browser) ? "CSV download started." : "CSV export failed.",
+      browser && exportCsv(snapshot(), browser) ? t("actions.csvStarted") : t("actions.csvFailed"),
     );
   };
   const downloadPng = async () => {
     try {
       const browser = dependencies.browser?.exports;
-      if (!browser) throw new Error("PNG export is unavailable.");
+      if (!browser) throw new Error(t("actions.pngUnavailable"));
       await exportPng(snapshot(), browser);
-      setStatus("PNG download started.");
+      setStatus(t("actions.pngStarted"));
     } catch (error) {
-      setStatus(`PNG export failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      setStatus(
+        t("actions.pngFailed", {
+          reason: error instanceof Error ? error.message : t("actions.unknownError"),
+        }),
+      );
     }
   };
 

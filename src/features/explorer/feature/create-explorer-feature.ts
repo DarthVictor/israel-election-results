@@ -22,15 +22,16 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
   const currentLoader = createElectionResultsLoader({
     selected: selection.election,
     loadElection: dependencies.data.loadElection,
-    mismatchMessage: "The result file does not match the selected election.",
+    mismatchMessage: () => dependencies.i18n.t("dataError.electionMismatch"),
   });
   const comparisonLoader = createElectionResultsLoader({
     selected: selection.compareElection,
     active: () => selection.state().mode === "compare",
     loadElection: dependencies.data.loadElection,
-    mismatchMessage: "The comparison file does not match the selected election.",
+    mismatchMessage: () => dependencies.i18n.t("dataError.comparisonMismatch"),
   });
   const explore = createExploreView({
+    i18n: dependencies.i18n,
     state: selection.state,
     election: selection.election,
     compareElection: selection.compareElection,
@@ -39,6 +40,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
     comparisonResults: comparisonLoader.results,
   });
   const table = createTableView({
+    i18n: dependencies.i18n,
     state: selection.state,
     compareParty: selection.compareParty,
     rows: explore.rows,
@@ -59,6 +61,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
     reloadComparisonResults: comparisonLoader.reload,
   };
   const map = createMapView({
+    t: dependencies.i18n.t,
     state: selection.state,
     geometry: manifestGeometry.geometry,
     geometryError: manifestGeometry.geometryError,
@@ -74,6 +77,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
     reloadGeometry: manifestGeometry.reloadGeometry,
   });
   const actions = createExplorerActions({
+    i18n: dependencies.i18n,
     manifest: manifestGeometry.manifest,
     state: selection.state,
     writeState: selection.writeState,

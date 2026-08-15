@@ -4,9 +4,12 @@ import type { ElectionManifest, ElectionResultsFile } from "../../../domain/cont
 import type { ExplorerFeature as GeometryFeature } from "../topology";
 import { createExplorerFeature } from "./create-explorer-feature";
 import type { ExplorerFeature, ExplorerFeatureDependencies } from "./explorer-feature.types";
+import { createStaticI18n } from "../../../i18n/create-i18n";
+
+const i18n = createStaticI18n("en");
 
 const manifest: ElectionManifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   geometryUrl: "/data/localities.topo.json",
   elections: [
     {
@@ -16,7 +19,7 @@ const manifest: ElectionManifest = {
       sourceUrl: "https://example.test/24",
       sourceCsvUrl: "https://example.test/24.csv",
       dataUrl: "/data/elections/24.json",
-      parties: [{ id: "YESH-ATID", nameHe: "×™×© ×¢×ª×™×“", nameEn: "Yesh Atid" }],
+      parties: [{ id: "YESH-ATID", nameHe: "×™×© ×¢×ª×™×“", nameEn: "Yesh Atid", nameRu: null }],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },
     {
@@ -26,13 +29,13 @@ const manifest: ElectionManifest = {
       sourceUrl: "https://example.test/25",
       sourceCsvUrl: "https://example.test/25.csv",
       dataUrl: "/data/elections/25.json",
-      parties: [{ id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud" }],
+      parties: [{ id: "LIKUD", nameHe: "×ž×—×œ", nameEn: "Likud", nameRu: null }],
       nationalTotals: { eligible: 1, voters: 1, valid: 1, invalid: 0 },
     },
   ],
 };
 const resultFor = (electionId: number): ElectionResultsFile => ({
-  schemaVersion: 1,
+  schemaVersion: 2,
   electionId,
   localities: [
     {
@@ -66,7 +69,7 @@ const history = () => {
 };
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-function harness(dependencies: ExplorerFeatureDependencies): {
+function harness(dependencies: Omit<ExplorerFeatureDependencies, "i18n">): {
   feature: ExplorerFeature;
   dispose(): void;
 } {
@@ -74,7 +77,7 @@ function harness(dependencies: ExplorerFeatureDependencies): {
   let dispose!: () => void;
   createRoot((nextDispose) => {
     dispose = nextDispose;
-    feature = createExplorerFeature(dependencies);
+    feature = createExplorerFeature({ ...dependencies, i18n });
   });
   return { feature, dispose };
 }
