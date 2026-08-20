@@ -20,6 +20,7 @@ const dictionary = {
     localityCsv: "CSV по населённым пунктам",
     map: "Карта:",
     and: "и",
+    code: "Код:",
   },
   panel: {
     controls: "Управление выборами и анализ населённых пунктов",

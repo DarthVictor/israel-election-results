@@ -211,6 +211,12 @@ export function ExplorerPage(props: {
           {t("footer.map")} <a href="https://leafletjs.com/">Leaflet</a> {t("footer.and")}{" "}
           <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
         </span>
+        <span>
+          {t("footer.code")}{" "}
+          <span dir="ltr">
+            © 2026 <a href="https://darthvictor.xyz">Victor Follet</a>
+          </span>
+        </span>
       </footer>
     </div>
   );

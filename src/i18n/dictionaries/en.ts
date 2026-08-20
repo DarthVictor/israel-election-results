@@ -20,6 +20,7 @@ const dictionary = {
     localityCsv: "Locality CSV",
     map: "Map:",
     and: "and",
+    code: "Code:",
   },
   panel: {
     controls: "Election controls and locality analysis",

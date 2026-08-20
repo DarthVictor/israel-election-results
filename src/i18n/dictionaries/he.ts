@@ -38,6 +38,8 @@ const dictionary = {
     localityCsv: "CSV ברמת יישוב",
     map: "מפה:",
     and: "ו-",
+    /** Scopes the copyright to the source code; the election data is not the author's. */
+    code: "קוד:",
   },
   panel: {
     controls: "בקרות בחירות וניתוח יישובים",
