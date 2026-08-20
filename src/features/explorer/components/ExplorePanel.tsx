@@ -1,5 +1,5 @@
 import { For, Show } from "solid-js";
-import type { LocalityResult, PartyList } from "../../../domain/contracts";
+import type { LocalityProperties, LocalityResult, PartyList } from "../../../domain/contracts";
 import { useI18n } from "../../../i18n/context";
 import { strongestLocality } from "../analysis";
 import { ComparisonDetails } from "./ComparisonDetails";
@@ -18,6 +18,8 @@ export function ExplorePanel(props: {
   onSelect(localityId: number): void;
   selected?: LocalityResult;
   selectedComparison?: LocalityResult;
+  /** A selected map area the chosen election reports no results for. */
+  selectedWithoutResults?: LocalityProperties;
   compareParty?: PartyList;
   compareMode: boolean;
 }) {
@@ -89,10 +91,27 @@ export function ExplorePanel(props: {
       <Show
         when={props.selected ?? props.selectedComparison}
         fallback={
-          <section class="locality-panel empty-selection">
-            <h2>{t("explore.selectLocality")}</h2>
-            <p>{t("explore.selectLocalityHint")}</p>
-          </section>
+          <Show
+            when={props.selectedWithoutResults}
+            fallback={
+              <section class="locality-panel empty-selection">
+                <h2>{t("explore.selectLocality")}</h2>
+                <p>{t("explore.selectLocalityHint")}</p>
+              </section>
+            }
+          >
+            {(area) => (
+              <section
+                class="locality-panel empty-selection"
+                aria-live="polite"
+                data-testid="selected-locality-without-results"
+              >
+                <p class="eyebrow">{t("details.selected")}</p>
+                <h2>{localityName(area())}</h2>
+                <p>{t("details.noResults")}</p>
+              </section>
+            )}
+          </Show>
         }
       >
         {(selected) =>

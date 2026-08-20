@@ -92,6 +92,8 @@ const dictionary = {
     turnout: "Turnout",
     validBallots: "Valid ballots",
     breakdown: "List breakdown",
+    noResults:
+      "The official results report no votes for this area in this election. Regional-council areas and institutional localities are reported through the localities inside them.",
   },
   comparison: {
     title: "Independent A / B locality comparison",

@@ -1,3 +1,4 @@
+import { Show } from "solid-js";
 import { useI18n } from "../../../i18n/context";
 
 export function MapLegend(props: { compareMode: boolean }) {
@@ -17,7 +18,11 @@ export function MapLegend(props: { compareMode: boolean }) {
         <span>{props.compareMode ? t("legend.zero") : ""}</span>
         <span>{props.compareMode ? t("legend.positive") : t("legend.higher")}</span>
       </div>
-      <small>{t("legend.noData")}</small>
+      {/* The map now draws only localities the chosen Election reports, so a gray area is
+          left over from comparison alone: a locality one of the two Elections never listed. */}
+      <Show when={props.compareMode}>
+        <small>{t("legend.noData")}</small>
+      </Show>
     </div>
   );
 }

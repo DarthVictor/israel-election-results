@@ -38,6 +38,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
     compareParty: selection.compareParty,
     results: currentLoader.results,
     comparisonResults: comparisonLoader.results,
+    geometry: manifestGeometry.geometry,
   });
   const table = createTableView({
     i18n: dependencies.i18n,
@@ -63,7 +64,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
   const map = createMapView({
     t: dependencies.i18n.t,
     state: selection.state,
-    geometry: manifestGeometry.geometry,
+    geometry: explore.mappableGeometry,
     geometryError: manifestGeometry.geometryError,
     currentResults: explore.currentResults,
     rows: explore.rows,
@@ -89,7 +90,7 @@ export function createExplorerFeature(dependencies: ExplorerFeatureDependencies)
     compareParty: selection.compareParty,
     comparisonRows: explore.comparisonRows,
     comparisonReady: explore.comparisonReady,
-    geometry: manifestGeometry.geometry,
+    geometry: explore.mappableGeometry,
     localityRows: explore.rows,
     browser: dependencies.browser,
   });

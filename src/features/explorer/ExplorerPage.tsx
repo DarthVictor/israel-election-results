@@ -156,6 +156,7 @@ export function ExplorerPage(props: {
                         onSelect={selectExploreLocality}
                         selected={props.explorer.explore.selected()}
                         selectedComparison={props.explorer.explore.selectedComparison()}
+                        selectedWithoutResults={props.explorer.explore.selectedWithoutResults()}
                         compareParty={props.explorer.selection.compareParty()}
                         compareMode={props.explorer.selection.state().mode === "compare"}
                       />
