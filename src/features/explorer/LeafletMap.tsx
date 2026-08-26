@@ -43,11 +43,10 @@ export function LeafletMap(props: LeafletMapProps) {
     if (!element) return;
     map = L.map(element, { zoomControl: false, attributionControl: true, minZoom: 7, maxZoom: 13 });
     L.control.zoom({ position: "bottomright" }).addTo(map);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       subdomains: "abcd",
       maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     map.setView([31.25, 34.85], 8);
     requestAnimationFrame(() => map?.invalidateSize());
