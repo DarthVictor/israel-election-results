@@ -1,0 +1,109 @@
+.locality-panel h3 {
+  margin: 1.3rem 0 0.55rem;
+  font-size: 0.82rem;
+}
+.party-breakdown {
+  display: grid;
+  gap: 0.28rem;
+  max-height: 14rem;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  list-style: none;
+}
+.party-breakdown li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.38rem 0;
+  border-bottom: 1px solid #e1edf6;
+  font-size: 0.78rem;
+}
+.party-breakdown .party-name {
+  display: block;
+  min-width: 0;
+  max-width: min(16rem, 68vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.empty-party-state h2 {
+  margin: 0;
+}
+.empty-party-state p {
+  margin: 0.35rem 0 0;
+  color: #4d6680;
+}
+.party-breakdown b {
+  color: #0b5ea8;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-region {
+  position: relative;
+  min-height: 0;
+  background: #e6f1fa;
+}
+.leaflet-map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.leaflet-container {
+  background: #e6f1fa;
+  font-family: inherit;
+}
+.leaflet-control-attribution {
+  max-width: 250px;
+  font-size: 9px;
+}
+.map-placeholder,
+.loading-screen {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  padding: 2rem;
+  color: #4d6680;
+  text-align: center;
+}
+.map-error {
+  position: absolute;
+  z-index: 20;
+  inset-block: 1rem auto;
+  inset-inline: 1rem auto;
+  width: min(20rem, calc(100% - 2rem));
+}
+.map-legend {
+  position: absolute;
+  z-index: 10;
+  inset-inline-end: 1rem;
+  bottom: 1.8rem;
+  width: 11rem;
+  padding: 0.75rem;
+  border: 1px solid #c8d9e8;
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 5px 15px rgb(28 75 112 / 0.12);
+  color: #314e68;
+  font-size: 0.69rem;
+}
+.legend-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  margin-top: 0.5rem;
+}
+.legend-scale i {
+  height: 0.62rem;
+  background: #edf6fd;
+}
+.legend-scale i:nth-child(2) {
+  background: #cfe7f8;
+}
+.legend-scale i:nth-child(3) {
+  background: #95c8eb;
+}
+.legend-scale i:nth-child(4) {
+  background: #4a98d0;
+}

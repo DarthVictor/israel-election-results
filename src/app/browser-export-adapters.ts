@@ -1,4 +1,4 @@
-/** Browser-only export effects, supplied to the Explorer action factory by App. */
+/** Browser-only export effects supplied at the application boundary. */
 export function downloadText(filename: string, contents: string, type = "text/csv;charset=utf-8") {
   downloadBlob(filename, new Blob([contents], { type }));
 }

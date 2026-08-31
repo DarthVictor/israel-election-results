@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Israel Election Results Explorer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Israel Election Results">
   <rect width="180" height="180" rx="40" fill="#193f32"/>
   <path d="M90 31 144 126H36L90 31Zm0 27L60 111h60L90 58Z" fill="#f5f1e8"/>
   <circle cx="90" cy="139" r="13" fill="#dc8b35"/>

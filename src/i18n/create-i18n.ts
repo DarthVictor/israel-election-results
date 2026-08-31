@@ -1,5 +1,5 @@
 import type { Accessor } from "solid-js";
-import { createFormatters, formatIsoDate, type Formatters } from "./format";
+import { createFormatters, type Formatters, formatIsoDate } from "./format";
 import { DEFAULT_LOCALE, LOCALE_DIRECTIONS, type Locale } from "./locales";
 import { displayLocalityName, displayPartyName, displayShortPartyName } from "./names";
 import { createTranslator, type Pluralize, type Translate, type Translator } from "./translate";

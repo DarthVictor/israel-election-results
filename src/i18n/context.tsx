@@ -1,7 +1,7 @@
-import { createContext, createSignal, useContext, type JSX } from "solid-js";
+import { createContext, createSignal, type JSX, useContext } from "solid-js";
 import { createI18n, type I18n } from "./create-i18n";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
-import { readStoredLocale, type LocaleStorage } from "./storage";
+import { type LocaleStorage, readStoredLocale } from "./storage";
 
 const I18nContext = createContext<I18n>();
 

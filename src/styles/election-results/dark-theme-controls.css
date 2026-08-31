@@ -1,0 +1,105 @@
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* The selected basemap and the surrounding controls share one readable contrast system. */
+[data-theme="dark"] {
+  color: #e6edf5;
+  background: #101923;
+}
+[data-theme="dark"] .app-shell {
+  background: #101923;
+}
+[data-theme="dark"] .site-header a,
+[data-theme="dark"] .site-footer a,
+[data-theme="dark"] .table-wrap td:first-child button {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .mode-label,
+[data-theme="dark"] .site-footer,
+[data-theme="dark"] .comparison-note,
+[data-theme="dark"] .table-count,
+[data-theme="dark"] .status-message,
+[data-theme="dark"] .empty-selection,
+[data-theme="dark"] .insight span,
+[data-theme="dark"] .insight small,
+[data-theme="dark"] .stat-list dt,
+[data-theme="dark"] .legend-labels,
+[data-theme="dark"] .map-placeholder,
+[data-theme="dark"] .loading-screen {
+  color: #a9bacb;
+}
+[data-theme="dark"] .results-layout,
+[data-theme="dark"] .analysis-panel {
+  border-color: #30465b;
+  background: #172432;
+}
+[data-theme="dark"] .results-layout {
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] select,
+[data-theme="dark"] input,
+[data-theme="dark"] .mode-tabs button,
+[data-theme="dark"] .action-row button,
+[data-theme="dark"] .table-wrap th button,
+[data-theme="dark"] .table-wrap td button {
+  border-color: #49677f;
+  background: #1f3142;
+  color: #e6edf5;
+}
+[data-theme="dark"] .locale-switcher,
+[data-theme="dark"] .theme-switcher {
+  border-color: #49677f;
+  background: #1f3142;
+}
+[data-theme="dark"] .toggle-option {
+  color: #e6edf5;
+}
+[data-theme="dark"] .toggle-option:hover {
+  background: #29445c;
+}
+[data-theme="dark"] .toggle-option.active,
+[data-theme="dark"] .toggle-option[aria-pressed="true"] {
+  background: #2672b5;
+  color: #fff;
+}
+[data-theme="dark"] .toggle-option.active:hover,
+[data-theme="dark"] .toggle-option[aria-pressed="true"]:hover {
+  background: #3288d0;
+}
+[data-theme="dark"] .mode-tabs,
+[data-theme="dark"] .insight-section,
+[data-theme="dark"] .locality-panel {
+  border-color: #30465b;
+}
+[data-theme="dark"] .mode-tabs button.active {
+  border-color: #4d9be8;
+  background: #2672b5;
+  color: #fff;
+}
+[data-theme="dark"] .comparison-controls,
+[data-theme="dark"] .insight,
+[data-theme="dark"] .table-wrap th,
+[data-theme="dark"] .comparison-result div,
+[data-theme="dark"] .selected-result,
+[data-theme="dark"] .sheet-toggle {
+  background: #203447;
+}
+[data-theme="dark"] .comparison-result span,
+[data-theme="dark"] .selected-result span,
+[data-theme="dark"] .empty-party-state p {
+  color: #a9bacb;
+}
+[data-theme="dark"] .comparison-result strong,
+[data-theme="dark"] .insight strong,
+[data-theme="dark"] .empty-selection h2,
+[data-theme="dark"] .sheet-toggle {
+  color: #e6edf5;
+}

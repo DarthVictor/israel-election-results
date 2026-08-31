@@ -1,0 +1,47 @@
+[data-theme="dark"] .table-wrap,
+[data-theme="dark"] .table-wrap td,
+[data-theme="dark"] .party-breakdown li {
+  border-color: #30465b;
+}
+[data-theme="dark"] .search-results {
+  border-color: #49677f;
+  background: #1f3142;
+  box-shadow: 0 12px 25px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] .search-results button {
+  color: #e6edf5;
+}
+[data-theme="dark"] .search-results button:hover {
+  background: #29445c;
+}
+[data-theme="dark"] .rank {
+  border-color: #49677f;
+  color: #8ec5ff;
+}
+[data-theme="dark"] .selected-result strong,
+[data-theme="dark"] .party-breakdown b,
+[data-theme="dark"] .sr-status {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .map-region,
+[data-theme="dark"] .leaflet-container {
+  background: #101923;
+}
+[data-theme="dark"] .map-legend {
+  border-color: #49677f;
+  background: rgb(23 36 50 / 0.95);
+  color: #e6edf5;
+  box-shadow: 0 5px 15px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] .leaflet-control-zoom a,
+[data-theme="dark"] .leaflet-control-attribution {
+  border-color: #49677f;
+  background: rgb(23 36 50 / 0.92);
+  color: #c4d2df;
+}
+[data-theme="dark"] .leaflet-control-attribution a {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .sheet-toggle::before {
+  background: #66839d;
+}

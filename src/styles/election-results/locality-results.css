@@ -1,0 +1,106 @@
+.table-wrap {
+  max-height: 36rem;
+  overflow: auto;
+  border: 1px solid #dce8f2;
+}
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+.table-wrap th {
+  position: sticky;
+  top: 0;
+  background: #e9f3fb;
+  text-align: end;
+}
+.table-wrap th:first-child,
+.table-wrap td:first-child {
+  text-align: start;
+}
+.table-wrap th button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0.48rem 0.35rem;
+  font-weight: 700;
+  text-align: inherit;
+}
+.table-wrap td {
+  padding: 0.44rem 0.35rem;
+  border-top: 1px solid #e3edf5;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.table-wrap td:first-child button {
+  max-width: 13rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #0b5ea8;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 0.15rem;
+  /* The cell caps its width but inherits nowrap, so a long name used to paint straight over
+     the votes column. Ellipsis keeps the longest paired names inside their own cell; the
+     full name stays available from the button's title. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* overflow on an inline-block aligns to its bottom margin edge instead of the baseline,
+     which would drop this cell below the rest of the row. */
+  vertical-align: bottom;
+}
+.control-stack {
+  display: grid;
+  gap: 0.9rem;
+}
+.control-stack label,
+.search-section > label {
+  display: grid;
+  gap: 0.35rem;
+  color: #314e68;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+select,
+input {
+  width: 100%;
+  border: 1px solid #b8d1e5;
+  background: #fff;
+  color: #102a43;
+  padding: 0.68rem 0.75rem;
+}
+select {
+  text-overflow: ellipsis;
+}
+.insight-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #dce8f2;
+}
+.insight-section h2,
+.locality-panel h2 {
+  margin: 0 0 0.82rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+}
+.insight {
+  min-height: 5.65rem;
+  padding: 0.7rem;
+  border: 1px solid #dce8f2;
+  background: #f5faff;
+}
+.insight span,
+.insight small {
+  display: block;
+  color: #6a7f93;
+  font-size: 0.67rem;
+  line-height: 1.25;
+}
