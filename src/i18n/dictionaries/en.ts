@@ -13,6 +13,11 @@ const dictionary = {
     officialResults: "Official results",
     downloadCsv: "Download locality CSV",
     locale: "Interface language",
+    theme: "Interface and map theme",
+  },
+  themes: {
+    light: "Light",
+    dark: "Dark",
   },
   footer: {
     finalResults: "Final results:",

@@ -1,6 +1,7 @@
 import type { ExplorerFeatureDependencies } from "../features/explorer/feature/explorer-feature.types";
 import { loadElection, loadGeometry, loadManifest } from "../features/explorer/data";
 import { topologyToFeatures } from "../features/explorer/topology";
+import { THEME_STORAGE_KEY, type ThemeStorage } from "./theme";
 import { LOCALE_STORAGE_KEY, type LocaleStorage } from "../i18n/storage";
 import { downloadBlob, downloadText, pngFromSvg } from "./browser-export-adapters";
 
@@ -51,6 +52,25 @@ export function createLocaleStorage(): LocaleStorage {
         window.localStorage.setItem(LOCALE_STORAGE_KEY, value);
       } catch {
         // A session-only language choice is a better outcome than a thrown error.
+      }
+    },
+  };
+}
+
+export function createThemeStorage(): ThemeStorage {
+  return {
+    read: () => {
+      try {
+        return window.localStorage.getItem(THEME_STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    },
+    write: (value) => {
+      try {
+        window.localStorage.setItem(THEME_STORAGE_KEY, value);
+      } catch {
+        // A session-only theme choice is a better outcome than a thrown error.
       }
     },
   };

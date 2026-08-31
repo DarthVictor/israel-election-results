@@ -14,14 +14,23 @@
       } catch (error) {
         // Blocked storage simply keeps the Hebrew default.
       }
+      try {
+        var storedTheme = localStorage.getItem("iere.theme");
+        if (storedTheme === "light" || storedTheme === "dark") {
+          document.documentElement.dataset.theme = storedTheme;
+          document.documentElement.style.colorScheme = storedTheme;
+        }
+      } catch (error) {
+        // Blocked storage simply keeps the light default.
+      }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
       content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
     />
-    <meta name="theme-color" content="#193f32" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#102a43" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Israel Election Results Explorer" />

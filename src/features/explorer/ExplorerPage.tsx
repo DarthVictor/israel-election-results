@@ -1,4 +1,4 @@
-import { Show, createSignal, onCleanup, onMount } from "solid-js";
+import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { AnalysisControls } from "./components/AnalysisControls";
 import { ExplorePanel } from "./components/ExplorePanel";
 import { ExportActions } from "./components/ExportActions";
@@ -6,7 +6,10 @@ import { LocalityTable } from "./components/LocalityTable";
 import { MapExplorerView } from "./components/MapExplorerView";
 import { ErrorPanel, LoadingScreen, ResultsStatus } from "./components/StatusPanels";
 import { LocaleSwitcher } from "./components/LocaleSwitcher";
+import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import { useI18n } from "../../i18n/context";
+import { createThemeStorage } from "../../app/create-browser-explorer-dependencies";
+import { readStoredTheme, type AppTheme } from "../../app/theme";
 import type { ExplorerFeature } from "./feature/explorer-feature.types";
 
 export type ExplorerPageEnvironment = {
@@ -21,6 +24,7 @@ export function ExplorerPage(props: {
   const { t } = useI18n();
   const [isMobile, setIsMobile] = createSignal(false);
   const [isSheetOpen, setIsSheetOpen] = createSignal(false);
+  const [theme, setTheme] = createSignal<AppTheme>(readStoredTheme(createThemeStorage()));
   const selectExploreLocality = (localityId: number) => {
     props.explorer.selection.chooseLocality(localityId);
     props.explorer.explore.setSearch("");
@@ -36,8 +40,15 @@ export function ExplorerPage(props: {
     );
   });
 
+  createEffect(() => {
+    const nextTheme = theme();
+    document.documentElement.dataset.theme = nextTheme;
+    document.documentElement.style.colorScheme = nextTheme;
+    createThemeStorage().write(nextTheme);
+  });
+
   return (
-    <div class="app-shell">
+    <div class="app-shell" data-theme={theme()}>
       <a class="skip-link" href="#explorer-content">
         {t("app.skipLink")}
       </a>
@@ -47,7 +58,10 @@ export function ExplorerPage(props: {
           <h1>{t("app.title")}</h1>
         </div>
         <div class="header-tools">
-          <LocaleSwitcher />
+          <div class="preference-toggles">
+            <LocaleSwitcher />
+            <ThemeSwitcher theme={theme()} onTheme={setTheme} />
+          </div>
           <div class="source-links" aria-label={t("header.sources")}>
             <a
               href={
@@ -181,7 +195,7 @@ export function ExplorerPage(props: {
                   </ResultsStatus>
                 </div>
               </aside>
-              <MapExplorerView map={props.explorer.map} />
+              <MapExplorerView map={props.explorer.map} theme={theme()} />
             </section>
           </Show>
         </Show>

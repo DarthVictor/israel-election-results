@@ -31,6 +31,11 @@ const dictionary = {
     officialResults: "תוצאות רשמיות",
     downloadCsv: "הורדת CSV ברמת יישוב",
     locale: "שפת הממשק",
+    theme: "ערכת נושא לממשק ולמפה",
+  },
+  themes: {
+    light: "בהיר",
+    dark: "כהה",
   },
   footer: {
     finalResults: "תוצאות סופיות:",

@@ -4,8 +4,9 @@ import { LeafletMap } from "../LeafletMap";
 import type { createMapView } from "../views/create-map-view";
 import { MapLegend } from "./MapLegend";
 import { ErrorPanel } from "./StatusPanels";
+import type { AppTheme } from "../../../app/theme";
 
-export function MapExplorerView(props: { map: ReturnType<typeof createMapView> }) {
+export function MapExplorerView(props: { map: ReturnType<typeof createMapView>; theme: AppTheme }) {
   const { t } = useI18n();
   return (
     <section class="map-region" aria-label={t("map.region")} data-testid="map-region">
@@ -23,6 +24,7 @@ export function MapExplorerView(props: { map: ReturnType<typeof createMapView> }
         }
       >
         <LeafletMap
+          theme={props.theme}
           features={props.map.geometry()}
           rows={props.map.rows()}
           partyId={props.map.state().party}

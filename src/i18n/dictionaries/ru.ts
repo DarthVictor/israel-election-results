@@ -13,6 +13,11 @@ const dictionary = {
     officialResults: "Официальные результаты",
     downloadCsv: "Скачать CSV по населённым пунктам",
     locale: "Язык интерфейса",
+    theme: "Тема интерфейса и карты",
+  },
+  themes: {
+    light: "Светлая",
+    dark: "Тёмная",
   },
   footer: {
     finalResults: "Окончательные результаты:",

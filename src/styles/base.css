@@ -102,21 +102,65 @@ a:focus-visible {
   align-items: end;
   gap: 0.6rem;
 }
+.preference-toggles {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
 .source-links {
   display: flex;
   justify-content: end;
   gap: 0.85rem;
   flex-wrap: wrap;
 }
-.locale-switcher {
-  /* Overrides the full-width form baseline; in the header it should size to its content. */
+.locale-switcher,
+.theme-switcher {
+  display: inline-flex;
   width: auto;
-  padding: 0.34rem 0.5rem;
+  align-items: center;
+  gap: 0.18rem;
+  padding: 0.18rem;
   border: 1px solid #b8d1e5;
-  border-radius: 0.45rem;
+  border-radius: 0.5rem;
   background: #fff;
+}
+.toggle-option {
+  border: 0;
+  border-radius: 0.32rem;
+  background: transparent;
+  padding: 0.38rem 0.55rem;
   color: #163d5c;
+  cursor: pointer;
   font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.toggle-option:hover {
+  background: #e3f1fb;
+}
+.toggle-option.active,
+.toggle-option[aria-pressed="true"] {
+  background: #0b5ea8;
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(16 42 67 / 0.22);
+}
+.toggle-option.active:hover,
+.toggle-option[aria-pressed="true"]:hover {
+  background: #084c89;
+}
+.locale-switcher {
+  /* In the header, the language labels remain readable in their native scripts. */
+  direction: ltr;
+}
+.theme-switcher {
+  /* Keep Light/Dark in a predictable order even when the page is right-to-left. */
+  direction: ltr;
+}
+.locale-switcher,
+.theme-switcher {
+  width: auto;
 }
 .site-footer {
   display: flex;
@@ -768,4 +812,147 @@ select {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;
   }
+}
+
+/* The selected basemap and the surrounding controls share one readable contrast system. */
+[data-theme="dark"] {
+  color: #e6edf5;
+  background: #101923;
+}
+[data-theme="dark"] .app-shell {
+  background: #101923;
+}
+[data-theme="dark"] .site-header a,
+[data-theme="dark"] .site-footer a,
+[data-theme="dark"] .table-wrap td:first-child button {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .mode-label,
+[data-theme="dark"] .site-footer,
+[data-theme="dark"] .comparison-note,
+[data-theme="dark"] .table-count,
+[data-theme="dark"] .status-message,
+[data-theme="dark"] .empty-selection,
+[data-theme="dark"] .insight span,
+[data-theme="dark"] .insight small,
+[data-theme="dark"] .stat-list dt,
+[data-theme="dark"] .legend-labels,
+[data-theme="dark"] .map-placeholder,
+[data-theme="dark"] .loading-screen {
+  color: #a9bacb;
+}
+[data-theme="dark"] .explorer-layout,
+[data-theme="dark"] .analysis-panel {
+  border-color: #30465b;
+  background: #172432;
+}
+[data-theme="dark"] .explorer-layout {
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] select,
+[data-theme="dark"] input,
+[data-theme="dark"] .mode-tabs button,
+[data-theme="dark"] .action-row button,
+[data-theme="dark"] .table-wrap th button,
+[data-theme="dark"] .table-wrap td button {
+  border-color: #49677f;
+  background: #1f3142;
+  color: #e6edf5;
+}
+[data-theme="dark"] .locale-switcher,
+[data-theme="dark"] .theme-switcher {
+  border-color: #49677f;
+  background: #1f3142;
+}
+[data-theme="dark"] .toggle-option {
+  color: #e6edf5;
+}
+[data-theme="dark"] .toggle-option:hover {
+  background: #29445c;
+}
+[data-theme="dark"] .toggle-option.active,
+[data-theme="dark"] .toggle-option[aria-pressed="true"] {
+  background: #2672b5;
+  color: #fff;
+}
+[data-theme="dark"] .toggle-option.active:hover,
+[data-theme="dark"] .toggle-option[aria-pressed="true"]:hover {
+  background: #3288d0;
+}
+[data-theme="dark"] .mode-tabs,
+[data-theme="dark"] .insight-section,
+[data-theme="dark"] .locality-panel {
+  border-color: #30465b;
+}
+[data-theme="dark"] .mode-tabs button.active {
+  border-color: #4d9be8;
+  background: #2672b5;
+  color: #fff;
+}
+[data-theme="dark"] .comparison-controls,
+[data-theme="dark"] .insight,
+[data-theme="dark"] .table-wrap th,
+[data-theme="dark"] .comparison-result div,
+[data-theme="dark"] .selected-result,
+[data-theme="dark"] .sheet-toggle {
+  background: #203447;
+}
+[data-theme="dark"] .comparison-result span,
+[data-theme="dark"] .selected-result span,
+[data-theme="dark"] .empty-party-state p {
+  color: #a9bacb;
+}
+[data-theme="dark"] .comparison-result strong,
+[data-theme="dark"] .insight strong,
+[data-theme="dark"] .empty-selection h2,
+[data-theme="dark"] .sheet-toggle {
+  color: #e6edf5;
+}
+[data-theme="dark"] .table-wrap,
+[data-theme="dark"] .table-wrap td,
+[data-theme="dark"] .party-breakdown li {
+  border-color: #30465b;
+}
+[data-theme="dark"] .search-results {
+  border-color: #49677f;
+  background: #1f3142;
+  box-shadow: 0 12px 25px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] .search-results button {
+  color: #e6edf5;
+}
+[data-theme="dark"] .search-results button:hover {
+  background: #29445c;
+}
+[data-theme="dark"] .rank {
+  border-color: #49677f;
+  color: #8ec5ff;
+}
+[data-theme="dark"] .selected-result strong,
+[data-theme="dark"] .party-breakdown b,
+[data-theme="dark"] .sr-status {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .map-region,
+[data-theme="dark"] .leaflet-container {
+  background: #101923;
+}
+[data-theme="dark"] .map-legend {
+  border-color: #49677f;
+  background: rgb(23 36 50 / 0.95);
+  color: #e6edf5;
+  box-shadow: 0 5px 15px rgb(0 0 0 / 0.3);
+}
+[data-theme="dark"] .leaflet-control-zoom a,
+[data-theme="dark"] .leaflet-control-attribution {
+  border-color: #49677f;
+  background: rgb(23 36 50 / 0.92);
+  color: #c4d2df;
+}
+[data-theme="dark"] .leaflet-control-attribution a {
+  color: #8ec5ff;
+}
+[data-theme="dark"] .sheet-toggle::before {
+  background: #66839d;
 }
