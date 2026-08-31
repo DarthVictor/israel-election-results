@@ -1,4 +1,4 @@
-Israel Election Results Explorer — Rebuild Plan
+Israel Election Results — Rebuild Plan
 
 > **Status: completed. Historical record — not outstanding work.**
 > This plan describes the original rebuild and has been delivered in full. It is
@@ -11,7 +11,7 @@ The application will remain fully static: election data is normalized during the
 Target Architecture and Implementation
 Application foundation
 Create a Vite application using SolidJS, TypeScript, pnpm, ESLint, and Prettier.
-Organize the UI around four feature areas: application shell, map explorer, locality analytics, and comparison/table views.
+Organize the UI around four feature areas: application shell, election map, locality analytics, and comparison/results views.
 Use Solid signals and resources for application state and data loading; no global state library or backend is needed.
 Keep Leaflet for map navigation, GeoJSON interaction, keyboard-accessible locality selection, and responsive resize handling.
 Use a single responsive route with query-string state rather than a multi-page router.
@@ -32,7 +32,7 @@ Encode AnalysisState in URL parameters so refreshes and copied links restore the
 Validate URL values against the manifest and fall back to election 25, Likud, and explore mode when invalid.
 Comparisons use two explicitly independent election/list selections. The interface must not imply that differently named lists represent the same historical party.
 Product experience
-Name the product Israel Election Results Explorer with the subtitle “Locality-level results for Knesset elections 21–25, 2019–2022.”
+Name the product Israel Election Results with the subtitle “Locality-level results for Knesset elections 21–25, 2019–2022.”
 Desktop layout:Editorial header with project context and data source.
 Approximately 380 px analysis panel beside the map.
 Explore, Compare, and Table tabs.

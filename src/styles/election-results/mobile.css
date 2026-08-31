@@ -1,0 +1,105 @@
+@media (max-width: 760px) {
+  .app-shell {
+    padding: 0;
+  }
+  .site-header {
+    align-items: start;
+    margin: 0;
+    padding: 1.05rem 1rem 0.8rem;
+  }
+  .site-header a {
+    font-size: 0.74rem;
+    white-space: normal;
+    text-align: end;
+  }
+  .source-links {
+    flex-direction: column;
+    align-items: end;
+    gap: 0.22rem;
+  }
+  .site-footer {
+    flex-wrap: wrap;
+    padding: 0 1rem 1rem;
+  }
+  .results-layout {
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border-width: 1px 0 0;
+    border-radius: 0;
+  }
+  .map-region {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+  .analysis-panel {
+    position: absolute;
+    z-index: 30;
+    inset-inline: 0;
+    bottom: 0;
+    height: min(72dvh, 38rem);
+    max-height: calc(100% - 2rem);
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-top: 1px solid #c8d9e8;
+    box-shadow: 0 -12px 32px rgb(28 75 112 / 0.16);
+    transform: translateY(calc(100% - 4.2rem));
+    transition: transform 180ms ease-out;
+    touch-action: manipulation;
+  }
+  .analysis-panel.is-sheet-open {
+    transform: translateY(0);
+  }
+  .sheet-toggle {
+    display: flex;
+    width: 100%;
+    height: 4.2rem;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    border-radius: 0;
+    background: #fbfdff;
+    padding: 0.75rem 1rem;
+    color: #102a43;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .sheet-toggle::before {
+    position: absolute;
+    top: 0.45rem;
+    inset-inline-start: calc(50% - 1.2rem);
+    width: 2.4rem;
+    height: 0.24rem;
+    border-radius: 1rem;
+    background: #9ebed8;
+    content: "";
+  }
+  .analysis-sheet-content {
+    height: calc(100% - 4.2rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 0 1rem 1rem;
+  }
+  .control-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+  .insight-section {
+    margin-top: 1rem;
+  }
+  .map-legend {
+    inset-inline-end: 0.65rem;
+    bottom: 4.85rem;
+  }
+  .leaflet-control-zoom {
+    display: none;
+  }
+  .party-breakdown {
+    max-height: 11rem;
+  }
+}

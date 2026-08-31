@@ -1,16 +1,18 @@
-import { ExplorerPage } from "../features/explorer/ExplorerPage";
-import { createExplorerFeature } from "../features/explorer/feature/create-explorer-feature";
+import { ElectionResultsPage } from "../features/election-results/ElectionResultsPage";
+import { createElectionResultsStore } from "../features/election-results/state/create-election-results-store";
+import { ElectionResultsProvider } from "../features/election-results/state/ElectionResultsContext";
 import { useI18n } from "../i18n/context";
-import {
-  createBrowserExplorerDependencies,
-  createExplorerPageEnvironment,
-} from "./create-browser-explorer-dependencies";
+import { createBrowserDependencies } from "./create-browser-dependencies";
 
 /** Application composition root. */
 export function App() {
-  const explorer = createExplorerFeature({
-    ...createBrowserExplorerDependencies(),
+  const store = createElectionResultsStore({
+    ...createBrowserDependencies(),
     i18n: useI18n(),
   });
-  return <ExplorerPage explorer={explorer} environment={createExplorerPageEnvironment()} />;
+  return (
+    <ElectionResultsProvider store={store}>
+      <ElectionResultsPage />
+    </ElectionResultsProvider>
+  );
 }

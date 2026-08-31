@@ -1,6 +1,6 @@
-# Israel Election Results Explorer
+# Israel Election Results
 
-An accessible, client-side explorer for final locality-level results from Israeli Knesset elections 21–25 (2019–2022). It turns official Central Elections Committee returns into an interactive map, locality profile, sortable table, independent A/B comparison, and shareable, exportable analysis.
+An accessible, client-side presentation of final locality-level results from Israeli Knesset elections 21–25 (2019–2022). It turns official Central Elections Committee returns into an interactive map, locality profile, sortable results, independent A/B comparison, and shareable, exportable analysis.
 
 The project demonstrates a complete small data-product workflow: preserve official source data, validate and normalize it at build time, ship compact static assets, and make the resulting analysis clear on desktop and mobile. The map is not the product by itself—the selected locality, historical comparison, filters, source links, and exports are what make the data inspectable. Search works in Hebrew or English, every selection is captured in the URL so an analysis can be shared, and comparisons are presented as percentage-point change without claiming continuity between similarly named party lists. Controls are keyboard-navigable, focus states are visible, reduced motion is respected, and the map legend never relies on colour alone.
 

@@ -1,4 +1,4 @@
-import { flatten, resolveTemplate, translator, type Flatten } from "@solid-primitives/i18n";
+import { type Flatten, flatten, resolveTemplate, translator } from "@solid-primitives/i18n";
 import en from "./dictionaries/en";
 import he, { type Dictionary } from "./dictionaries/he";
 import ru from "./dictionaries/ru";

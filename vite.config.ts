@@ -1,6 +1,6 @@
 import { loadEnv } from "vite";
-import { defineConfig } from "vitest/config";
 import solid from "vite-plugin-solid";
+import { defineConfig } from "vitest/config";
 import { SITE_URL } from "./src/site.ts";
 
 export default defineConfig(({ mode }) => {
@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
     ],
     test: {
       environment: "node",
-      include: ["src/**/*.test.ts"],
+      include: ["src/**/__tests__/**/*.test.ts"],
     },
   };
 });

@@ -6,21 +6,21 @@
       // Applies a returning reader's language before first paint, so an English or Russian
       // visitor never sees the Hebrew right-to-left default flash past.
       try {
-        var stored = localStorage.getItem("iere.locale");
+        const stored = localStorage.getItem("iere.locale");
         if (stored === "en" || stored === "ru" || stored === "he") {
           document.documentElement.lang = stored;
           document.documentElement.dir = stored === "he" ? "rtl" : "ltr";
         }
-      } catch (error) {
+      } catch {
         // Blocked storage simply keeps the Hebrew default.
       }
       try {
-        var storedTheme = localStorage.getItem("iere.theme");
+        const storedTheme = localStorage.getItem("iere.theme");
         if (storedTheme === "light" || storedTheme === "dark") {
           document.documentElement.dataset.theme = storedTheme;
           document.documentElement.style.colorScheme = storedTheme;
         }
-      } catch (error) {
+      } catch {
         // Blocked storage simply keeps the light default.
       }
     </script>
@@ -33,16 +33,16 @@
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Israel Election Results Explorer" />
-    <meta property="og:title" content="Israel Election Results Explorer" />
+    <meta property="og:site_name" content="Israel Election Results" />
+    <meta property="og:title" content="Israel Election Results" />
     <meta
       property="og:description"
       content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
     />
     <meta property="og:image" content="/social-preview.png" />
-    <meta property="og:image:alt" content="Israel Election Results Explorer map preview" />
+    <meta property="og:image:alt" content="Israel Election Results map preview" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Israel Election Results Explorer" />
+    <meta name="twitter:title" content="Israel Election Results" />
     <meta
       name="twitter:description"
       content="Explore locality-level official results for Israeli Knesset elections 21–25 (2019–2022)."
@@ -51,7 +51,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>Israel Election Results Explorer | Knesset 21–25</title>
+    <title>Israel Election Results | Knesset 21–25</title>
   </head>
   <body>
     <div id="root"></div>

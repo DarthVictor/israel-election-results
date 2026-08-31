@@ -1,7 +1,7 @@
 import { createEffect } from "solid-js";
 import { render } from "solid-js/web";
 import { App } from "./app/App";
-import { createLocaleStorage } from "./app/create-browser-explorer-dependencies";
+import { createLocaleStorage } from "./app/create-browser-dependencies";
 import { I18nProvider, useI18n } from "./i18n/context";
 import en from "./i18n/dictionaries/en";
 import "./styles/base.css";

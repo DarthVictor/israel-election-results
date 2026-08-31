@@ -1,4 +1,4 @@
-# Israel Election Results Explorer
+# Israel Election Results
 
 This context describes the terms used to explore official Israeli election results by locality. It keeps historical election data distinct while allowing a viewer to inspect or compare them.
 
