@@ -9,3 +9,4 @@ PLAN.md
 pnpm-lock.yaml
 public/data/generated/
 data/raw/localities.json
+.env.example

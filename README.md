@@ -11,3 +11,7 @@ The data represents final official returns from the [Central Elections Committee
 List name translations are the one part of the data that does not come from the Committee, and they are kept visibly separate from the parts that do. English and Russian names are read from Wikipedia interlanguage links by a step that is run by hand and committed, so the build itself stays offline and deterministic. They are curated per election rather than per ballot code, because codes are reused between elections by unrelated lists, and a shared translation would quietly imply a continuity the analysis is careful never to claim. Names verified against the official results pages always win; Wikipedia only fills the gaps and supplies Russian.
 
 This project is a neutral visualization of official election results, not a poll, forecast, or endorsement. It is built with SolidJS, TypeScript, and Leaflet, and deploys as a fully static Vite build.
+
+## Analytics
+
+Production builds include the self-hosted Umami tracker when `PUBLIC_UMAMI_WEBSITE_ID` is set. Configure that variable in Vercel for the production environment; the local development server does not load the tracker.
