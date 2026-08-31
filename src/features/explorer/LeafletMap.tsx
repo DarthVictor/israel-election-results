@@ -1,7 +1,6 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import L from "leaflet";
 import type { LocalityResult } from "../../domain/contracts";
-import type { AppTheme } from "../../app/theme";
 import { useI18n } from "../../i18n/context";
 import {
   colorForComparison,
@@ -19,7 +18,6 @@ type LeafletMapProps = {
   comparison?: { rows: LocalityResult[]; partyId: string };
   selectedLocalityId?: number;
   onSelect: (localityId: number) => void;
-  theme: AppTheme;
 };
 
 const selectedStyle: L.PathOptions = { color: "#0038b8", weight: 2.5, fillOpacity: 0.92 };
@@ -28,27 +26,12 @@ export function LeafletMap(props: LeafletMapProps) {
   const { t } = useI18n();
   let element: HTMLDivElement | undefined;
   let map: L.Map | undefined;
-  let baseLayer: L.TileLayer | undefined;
-  let appliedTheme: AppTheme = "light";
   let localitiesLayer: L.GeoJSON | undefined;
   let previousSelectedId: number | undefined;
   let appliedLayerRevision = 0;
   const layersById = new Map<number, L.Path>();
   const baseStylesById = new Map<number, L.PathOptions>();
   const [layerRevision, setLayerRevision] = createSignal(0);
-
-  const tileLayerFor = (theme: AppTheme) =>
-    L.tileLayer(
-      `https://tiles.stadiamaps.com/tiles/${theme === "dark" ? "stamen_toner_dark" : "stamen_toner_lite"}/{z}/{x}/{y}{r}.png`,
-      {
-        maxZoom: 20,
-        attribution:
-          '&copy; <a href="https://www.stadiamaps.com/" target="_blank" rel="noreferrer">Stadia Maps</a> ' +
-          '&copy; <a href="https://www.stamen.com/" target="_blank" rel="noreferrer">Stamen Design</a> ' +
-          '&copy; <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">OpenMapTiles</a> ' +
-          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
-      },
-    );
 
   const applyBaseStyle = (localityId: number) => {
     const layer = layersById.get(localityId);
@@ -60,18 +43,13 @@ export function LeafletMap(props: LeafletMapProps) {
     if (!element) return;
     map = L.map(element, { zoomControl: false, attributionControl: true, minZoom: 7, maxZoom: 13 });
     L.control.zoom({ position: "bottomright" }).addTo(map);
-    appliedTheme = props.theme;
-    baseLayer = tileLayerFor(appliedTheme).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      subdomains: "abcd",
+      maxZoom: 19,
+      	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
     map.setView([31.25, 34.85], 8);
     requestAnimationFrame(() => map?.invalidateSize());
-  });
-
-  createEffect(() => {
-    const nextTheme = props.theme;
-    if (!map || !baseLayer || nextTheme === appliedTheme) return;
-    map.removeLayer(baseLayer);
-    baseLayer = tileLayerFor(nextTheme).addTo(map);
-    appliedTheme = nextTheme;
   });
 
   // Geometry, result rows, and party determine the choropleth itself. Selection

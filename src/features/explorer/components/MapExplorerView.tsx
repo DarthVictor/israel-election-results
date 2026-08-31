@@ -24,7 +24,6 @@ export function MapExplorerView(props: { map: ReturnType<typeof createMapView>; 
         }
       >
         <LeafletMap
-          theme={props.theme}
           features={props.map.geometry()}
           rows={props.map.rows()}
           partyId={props.map.state().party}
