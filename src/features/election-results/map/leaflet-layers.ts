@@ -1,3 +1,4 @@
+import { maplibreGL } from "@maplibre/maplibre-gl-leaflet";
 import L from "leaflet";
 import type { LocalityResult } from "../../../domain/contracts";
 import type { LocalityBoundary } from "../locality-boundaries";
@@ -78,14 +79,18 @@ function fillColor(
   return colorForShare(locality ? partyShare(locality, input.partyId) : undefined, scale);
 }
 
-export function createTileLayer(theme: "light" | "dark") {
-  const style = theme === "dark" ? "stamen_toner_dark" : "stamen_toner_lite";
-  return L.tileLayer(`https://tiles.stadiamaps.com/tiles/${style}/{z}/{x}/{y}{r}.png`, {
-    maxZoom: 20,
-    attribution:
-      '&copy; <a href="https://www.stadiamaps.com/">Stadia Maps</a> ' +
-      '&copy; <a href="https://www.stamen.com/">Stamen Design</a> ' +
-      '&copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> ' +
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+const BASEMAP_STYLES = {
+  light: "https://tiles.openfreemap.org/styles/positron",
+  dark: "https://tiles.openfreemap.org/styles/dark",
+} as const;
+const BASEMAP_ATTRIBUTION =
+  '<a href="https://openfreemap.org/">OpenFreeMap</a> &copy; ' +
+  '<a href="https://openmaptiles.org/">OpenMapTiles</a> Data from ' +
+  '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
+export function createBasemapLayer(theme: "light" | "dark") {
+  return maplibreGL({
+    style: BASEMAP_STYLES[theme],
+    attributionControl: { customAttribution: BASEMAP_ATTRIBUTION },
   });
 }

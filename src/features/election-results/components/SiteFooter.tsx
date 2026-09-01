@@ -22,7 +22,7 @@ export function SiteFooter() {
       </span>
       <span>
         {t("footer.map")} <a href="https://leafletjs.com/">Leaflet</a> {t("footer.and")}{" "}
-        <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+        <a href="https://openfreemap.org/">OpenFreeMap</a>
       </span>
     </footer>
   );

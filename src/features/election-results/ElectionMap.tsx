@@ -2,7 +2,7 @@ import L from "leaflet";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import type { AppTheme } from "../../app/theme";
 import { useI18n } from "../../i18n/context";
-import { createLocalityLayer, createTileLayer } from "./map/leaflet-layers";
+import { createBasemapLayer, createLocalityLayer } from "./map/leaflet-layers";
 import { useElectionResults } from "./state/ElectionResultsContext";
 
 const selectedStyle: L.PathOptions = { color: "#0038b8", weight: 2.5, fillOpacity: 0.92 };
@@ -12,7 +12,7 @@ export function ElectionMap(props: { theme: AppTheme }) {
   const { state, selectors, actions } = useElectionResults();
   let element: HTMLDivElement | undefined;
   let map: L.Map | undefined;
-  let baseLayer: L.TileLayer | undefined;
+  let baseLayer: L.Layer | undefined;
   let localityLayer: L.GeoJSON | undefined;
   let layers = new Map<number, L.Path>();
   let styles = new Map<number, L.PathOptions>();
@@ -26,7 +26,7 @@ export function ElectionMap(props: { theme: AppTheme }) {
     map = L.map(element, { zoomControl: false, attributionControl: true, minZoom: 7, maxZoom: 13 });
     L.control.zoom({ position: "bottomright" }).addTo(map);
     appliedTheme = props.theme;
-    baseLayer = createTileLayer(appliedTheme).addTo(map);
+    baseLayer = createBasemapLayer(appliedTheme).addTo(map);
     map.setView([31.25, 34.85], 8);
     requestAnimationFrame(() => map?.invalidateSize());
   });
@@ -35,7 +35,7 @@ export function ElectionMap(props: { theme: AppTheme }) {
     const theme = props.theme;
     if (!map || !baseLayer || theme === appliedTheme) return;
     map.removeLayer(baseLayer);
-    baseLayer = createTileLayer(theme).addTo(map);
+    baseLayer = createBasemapLayer(theme).addTo(map);
     appliedTheme = theme;
   });
 
