@@ -25,6 +25,7 @@ export const enPrimary = {
     localityCsv: "Locality CSV",
     map: "Map:",
     and: "and",
+    author: "Victor Follet",
   },
   panel: {
     controls: "Election controls and locality analysis",

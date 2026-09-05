@@ -24,6 +24,12 @@ export function SiteFooter() {
         {t("footer.map")} <a href="https://leafletjs.com/">Leaflet</a> {t("footer.and")}{" "}
         <a href="https://openfreemap.org/">OpenFreeMap</a>
       </span>
+      <span>
+        © 2026{" "}
+        <a href="https://darthvictor.xyz/" target="_blank" rel="noreferrer">
+          {t("footer.author")}
+        </a>
+      </span>
     </footer>
   );
 }

@@ -25,6 +25,7 @@ export const hePrimary = {
     localityCsv: "CSV ברמת יישוב",
     map: "מפה:",
     and: "ו-",
+    author: "ויקטור פולט",
   },
   panel: {
     controls: "בקרות בחירות וניתוח יישובים",

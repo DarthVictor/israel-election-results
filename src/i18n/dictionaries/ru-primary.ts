@@ -25,6 +25,7 @@ export const ruPrimary = {
     localityCsv: "CSV по населённым пунктам",
     map: "Карта:",
     and: "и",
+    author: "Виктор Фоллэ",
   },
   panel: {
     controls: "Управление выборами и анализ населённых пунктов",
