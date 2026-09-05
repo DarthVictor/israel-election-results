@@ -27,7 +27,7 @@ export function ElectionMap(props: { theme: AppTheme }) {
     L.control.zoom({ position: "bottomright" }).addTo(map);
     appliedTheme = props.theme;
     baseLayer = createBasemapLayer(appliedTheme).addTo(map);
-    map.setView([31.25, 34.85], 8);
+    map.setView([32, 35], 10);
     requestAnimationFrame(() => map?.invalidateSize());
   });
 
