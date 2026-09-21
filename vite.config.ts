@@ -1,7 +1,12 @@
+import { fileURLToPath } from "node:url";
 import { loadEnv } from "vite";
 import solid from "vite-plugin-solid";
 import { defineConfig } from "vitest/config";
 import { SITE_URL } from "./src/site.ts";
+
+const rtlTextPluginPath = fileURLToPath(
+  new URL("../dist/mapbox-gl-rtl-text.js", import.meta.resolve("@mapbox/mapbox-gl-rtl-text")),
+);
 
 export default defineConfig(({ mode }) => {
   const umamiWebsiteId = loadEnv(mode, process.cwd(), "PUBLIC_").PUBLIC_UMAMI_WEBSITE_ID;
@@ -11,6 +16,14 @@ export default defineConfig(({ mode }) => {
       : "";
 
   return {
+    optimizeDeps: {
+      exclude: ["@rtl-text-plugin?url"],
+    },
+    resolve: {
+      alias: {
+        "@rtl-text-plugin?url": `${rtlTextPluginPath}?url`,
+      },
+    },
     plugins: [
       solid(),
       {

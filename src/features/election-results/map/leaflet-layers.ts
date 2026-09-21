@@ -1,5 +1,7 @@
 import { maplibreGL } from "@maplibre/maplibre-gl-leaflet";
+import rtlTextPluginUrl from "@rtl-text-plugin?url";
 import L from "leaflet";
+import { getRTLTextPluginStatus, setRTLTextPlugin } from "maplibre-gl";
 import type { LocalityResult } from "../../../domain/contracts";
 import type { LocalityBoundary } from "../locality-boundaries";
 import {
@@ -87,6 +89,10 @@ const BASEMAP_ATTRIBUTION =
   '<a href="https://openfreemap.org/">OpenFreeMap</a> &copy; ' +
   '<a href="https://openmaptiles.org/">OpenMapTiles</a> Data from ' +
   '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
+if (getRTLTextPluginStatus() === "unavailable") {
+  void setRTLTextPlugin(rtlTextPluginUrl, true);
+}
 
 export function createBasemapLayer(theme: "light" | "dark") {
   return maplibreGL({

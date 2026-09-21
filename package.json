@@ -26,6 +26,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-rtl-text": "0.4.0",
     "@maplibre/maplibre-gl-leaflet": "^0.1.4",
     "@solid-primitives/i18n": "^2.2.1",
     "leaflet": "^1.9.4",
